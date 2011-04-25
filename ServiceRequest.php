@@ -51,12 +51,13 @@ class ServiceRequest{
 	
 	public function __construct($configuration) {
 		$this->_configuration = $configuration;
-		//echo $this->_configuration->getAppId();
+		$this->_methodParams['applib'] = 'php';
+		//$this->_methodParams['appname'] = '';
 	}
 	
 	public function setMethodParams($paramsArray)
 	{
-		$this->_methodParams = $paramsArray;	
+		$this->_methodParams = array_merge($this->_methodParams, $paramsArray);
 	}
 	
 	public function setFileToPost($fileName)
