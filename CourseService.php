@@ -293,7 +293,7 @@ class CourseService{
                 $parameterMap['notificationframesrc'] = $notificationFrameUrl;
 			}
             if(isset($stylesheetUrl)){
-                $parameterMap['stylesheet'] = $stylesheetUrl;
+                $parameterMap['cssurl'] = $stylesheetUrl;
 			}
 
             $request->setMethodParams($parameterMap);
