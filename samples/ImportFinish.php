@@ -28,9 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-?>
-
-<?php
 
 require_once('../ScormEngineService.php');
 require_once('config.php');

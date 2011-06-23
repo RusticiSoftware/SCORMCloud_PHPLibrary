@@ -28,9 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-?>
-
-<?php
 
  /// <summary>
     /// Data class to hold high-level Registration Data

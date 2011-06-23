@@ -28,9 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-?>
-
-<?php  /// Configuration File 
+/// Configuration File 
 
 unset($CFG);
 

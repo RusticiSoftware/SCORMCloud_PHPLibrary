@@ -28,10 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-?>
-
-<?php
-
 require_once 'ServiceRequest.php';
 require_once 'CourseData.php';
 require_once 'Enums.php';

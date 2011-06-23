@@ -28,9 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-?>
-
-<?php
 
 require_once 'RegistrationData.php';
 require_once 'Enums.php';
