@@ -100,13 +100,6 @@ class UploadService{
     	$response = $request->CallService("rustici.upload.deleteFiles");
     }
 
-
-
-	public function GetUploadLink($importRedirectUrl)
-	{
-		return GetUploadUrl($importRedirectUrl);
-	}
-	
 	public function GetUploadUrl($importRedirectUrl)
 		{
 		write_log('UploadService.GetUploadLink() being called...');
@@ -120,6 +113,11 @@ class UploadService{
 		
 		return $request->ConstructUrl("rustici.upload.uploadFile");
 
+	}
+
+	public function GetUploadLink($importRedirectUrl)
+	{
+		return $this->GetUploadUrl($importRedirectUrl);
 	}
 }
 

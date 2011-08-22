@@ -362,7 +362,21 @@ class CourseService{
         
     }
 
-    
+    /// <summary>
+    /// Update the assets of the specified course
+    /// </summary>
+    /// <param name="courseId">Unique Identifier for the course</param>
+    /// <param name="uploadLocation">The relative path to the uploaded zip file</param>
+    public function UpdateAssetsFromUploadedFile($courseId, $uploadLocation)
+    {
+    	$request = new ServiceRequest($this->_configuration);
+    	$params = array('courseid' => $courseId, 'path' => $uploadLocation);
+    	
+    	$request->setMethodParams($params);
+    	$response = $request->CallService('rustici.course.updateAssets');
+    	
+    	return $response;
+    }
  }
 
 ?>
