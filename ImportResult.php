@@ -45,15 +45,15 @@ class ImportResult{
     {
 		if(isset($importResultElement))
 		{
-		        $this->_title = (string) $importResultElement->title->InnerText;
-		        $this->_message = (string) $importResultElement->message->InnerText;
+		        $this->_title = (string) $importResultElement->title;
+		        $this->_message = (string) $importResultElement->message;
 		        $this->_wasSuccessful = (bool) $importResultElement["successful"];
 				$pwarnings = $importResultElement->parserwarnings;
 				foreach ($pwarnings as $pwarning)
 				{
 					foreach ($pwarning->warning as $warning)
 		        	{
-						$this->_parserWarnings[] = $warning->InnerText;
+						$this->_parserWarnings[] = (string)$warning;
 					}
 				}
 
