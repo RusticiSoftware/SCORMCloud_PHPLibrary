@@ -91,6 +91,7 @@ class ServiceRequest{
 		//error_log('serviceUrl = '.$serviceUrl);
 		$parameterMap = array(	'method' => $methodName,
 								'appid' => $this->_configuration->getAppId(),
+								'origin' => $this->_configuration->getOriginString(),
 								'ts' => gmdate("YmdHis")
 							);
 		array_merge($parameterMap,$this->_methodParams);

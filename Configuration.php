@@ -34,8 +34,9 @@ class Configuration{
 	private $_appId = null;
     private $_securityKey = null;
     private $_scormEngineServiceUrl = null;
+    private $_originString = 'rusticisoftware.phplibrary.1.2.1';
 
-	public function __construct($scormEngineServiceUrl, $appId, $securityKey) {
+	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString) {
 		//echo $scormEngineServiceUrl;
 		//echo $appId;
 		//echo $securityKey;
@@ -56,6 +57,10 @@ class Configuration{
 			$this->setSecurityKey($securityKey);
 		} else {
 			//throw new ScormEngine_Exception('Must provide a securityKey.');
+		}
+		
+		if (isset($originString)) {
+			$this->setOriginString($originString);
 		}
 	}
 	
@@ -84,6 +89,16 @@ class Configuration{
 	public function setScormEngineServiceUrl($scormEngineServiceUrl)
 	{
 		$this->_scormEngineServiceUrl = $scormEngineServiceUrl;
+	}
+	
+	public function getOriginString()
+	{
+		return $this->_originString;
+	}
+	
+	public function setOriginString($originString)
+	{
+		$this->_originString = $originString;
 	}
 }
 ?>

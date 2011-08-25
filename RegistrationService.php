@@ -98,8 +98,7 @@ class RegistrationService{
 			{
 				$params['versionid'] = $versionId;
 			}
-
-							
+			
 			$request->setMethodParams($params);
 			
             return $request->CallService("rustici.registration.createRegistration");
