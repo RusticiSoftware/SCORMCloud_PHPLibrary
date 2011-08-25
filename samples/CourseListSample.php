@@ -53,9 +53,10 @@ global $CFG;
 $ServiceUrl = $CFG->scormcloudurl;
 $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
+$Origin = $CFG->scormcloudorigin;
 
 write_log('Creating ScormEngineService');
-$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey);
+$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 write_log('ScormEngineService Created');
 
 $debugService = $ScormService->getdebugService();

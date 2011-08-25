@@ -52,10 +52,11 @@ global $CFG;
 $ServiceUrl = $CFG->scormcloudurl;
 $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
+$Origin = $CFG->scormcloudorigin;
 
 $regid = $_GET['regid'];
 
-$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey);
+$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 
 $regService = $ScormService->getRegistrationService();
 

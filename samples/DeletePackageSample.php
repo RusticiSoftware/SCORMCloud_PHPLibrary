@@ -36,8 +36,9 @@ global $CFG;
 $ServiceUrl = $CFG->scormcloudurl;
 $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
+$Origin = $CFG->scormcloudorigin;
 
-$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey);
+$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 
 $courseid = $_GET['id'];
 
