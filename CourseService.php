@@ -297,7 +297,23 @@ class CourseService{
         }
 
 
-
+    public function GetImportCourseUrl($courseId, $redirectUrl)
+    {
+    	$request = new ServiceRequest($this->_configuration);
+    	$params = array('courseid' => $courseId,
+    					'redirecturl' => $redirectUrl);
+    	$request->setMethodParams($params);
+    	return $request->ConstructUrl('rustici.course.importCourse');
+    }
+    
+    public function GetUpdateAssetsUrl($courseId, $redirectUrl)
+    {
+    	$request = new ServiceRequest($this->_configuration);
+    	$params = array('courseid' => $courseId,
+    					'redirecturl' => $redirectUrl);
+    	$request->setMethodParams($params);
+    	return $request->ConstructUrl('rustici.course.updateAssets');
+    }
     
     /// <summary>
     /// Retrieve the list of course attributes associated with a specific version
