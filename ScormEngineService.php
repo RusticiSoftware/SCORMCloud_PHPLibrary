@@ -76,9 +76,12 @@ class ScormEngineService{
         //$_ftpService = new FtpService(configuration);
 	}
 	
-    public function isValidAccount(){
-        if (empty($this->getAppId()) || empty($this->getSecurityKey()) ||
-            empty($this->getScormEngineServiceUrl()) || empty($this->getOriginString())) {
+    public function isValidAccount() {
+        $appId = $this->getAppId();
+        $key = $this->getSecurityKey();
+        $url = $this->getScormEngineServiceUrl();
+        $origin = $this->getOriginString();
+        if (empty($appId) || empty($key) || empty($url) || empty($origin)) {
             return false;
         }
         
