@@ -77,9 +77,12 @@ class ScormEngineService{
 	}
 	
     public function isValidAccount(){
+        if (empty($this->getAppId()) || empty($this->getSecurityKey()) ||
+            empty($this->getScormEngineServiceUrl()) || empty($this->getOriginString())) {
+            return false;
+        }
         
         return $this->_debugService->CloudAuthPing();
-        
     }
     
     public function isValidUrl(){
@@ -195,6 +198,11 @@ class ScormEngineService{
     public function getScormEngineServiceUrl()
     {
             return $this->_configuration->getScormEngineServiceUrl();
+    }
+    
+    public function getOriginString()
+    {
+        return $this->_configuration->getOriginString();
     }
 
 	/**
