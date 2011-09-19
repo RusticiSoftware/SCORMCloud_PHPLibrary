@@ -45,22 +45,34 @@ class DebugService{
 		//echo $this->_configuration->getAppId();
 	}
 	
-	public function CloudPing()
+	public function CloudPing($throw = false)
     {
 		write_log('rustici.debug.ping being called...');
         $request = new ServiceRequest($this->_configuration);
-        $response = $request->CallService("rustici.debug.ping");
-		write_log('rustici.debug.ping returned : '.$response);
+        try {
+            $response = $request->CallService("rustici.debug.ping");
+            write_log('rustici.debug.ping returned : '.$response);
+        } catch (Exception $e) {
+            write_log('rustici.debug.ping threw Exception: '.$e->getMessage());
+            return false;
+        }
+        
 		$xml = simplexml_load_string($response);
 		return ($xml['stat'] == 'ok');
     }
 
-	public function CloudAuthPing()
+	public function CloudAuthPing($throw = false)
     {
 		write_log('rustici.debug.authPing being called...');
         $request = new ServiceRequest($this->_configuration);
-        $response = $request->CallService("rustici.debug.authPing");
-		write_log('rustici.debug.authPing returned : '.$response);
+        try {
+            $response = $request->CallService("rustici.debug.authPing");
+            write_log('rustici.debug.authPing returned : '.$response);
+        } catch (Exception $e) {
+            write_log('rustici.debug.authPing threw Exception: '.$e->getMessage());
+            return false;
+        }
+        
 		$xml = simplexml_load_string($response);
 		return ($xml['stat'] == 'ok');
     }
