@@ -46,6 +46,7 @@ require_once 'ReportingService.php';
 require_once 'TaggingService.php';
 require_once 'AccountService.php';
 require_once 'DebugService.php';
+require_once 'DispatchService.php';
 
 require_once 'DebugLogger.php';
 
@@ -61,6 +62,7 @@ class ScormEngineService{
     private $_taggingService = null;
     private $_accountService = null;
 	private $_debugService = null;
+    private $_dispatchService = null;
 
 	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString) {
 
@@ -73,6 +75,7 @@ class ScormEngineService{
         $this->_taggingService = new TaggingService($this->_configuration);
         $this->_accountService = new AccountService($this->_configuration);
 		$this->_debugService = new DebugService($this->_configuration);
+        $this->_dispatchService = new DispatchService($this->_configuration);
         //$_ftpService = new FtpService(configuration);
 	}
 	
@@ -171,6 +174,16 @@ class ScormEngineService{
     public function getDebugService()
     {
         return $this->_debugService;
+    }
+
+	/**
+	* <summary>
+    * Contains SCORM Engine dispatch functionality.
+    * </summary>
+	*/
+    public function getDispatchService()
+    {
+        return $this->_dispatchService;
     }
 
 	/**
