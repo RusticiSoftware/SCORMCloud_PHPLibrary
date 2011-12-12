@@ -284,6 +284,7 @@ class CourseService{
 			$request = new ServiceRequest($this->_configuration);
 
             $parameterMap = array('courseid' => $courseId);
+			$parameterMap['editor'] = "latest";
 
             if(isset($notificationFrameUrl)){
                 $parameterMap['notificationframesrc'] = $notificationFrameUrl;
