@@ -30,6 +30,7 @@
 
 
 require_once 'ServiceRequest.php';
+require_once 'DebugLogger.php';
 
 /// <summary>
 /// Client-side proxy for the "rustici.course.*" Hosted SCORM Engine web
@@ -54,7 +55,7 @@ class ReportingService{
 		$request->setMethodParams($params);
        	$response = $request->CallService("rustici.reporting.getReportageAuth");
        	$xml = simplexml_load_string($response);
-		error_log($xml->auth);
+		write_log($xml->auth);
        	return $xml->auth;
 	}
 	

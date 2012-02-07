@@ -33,6 +33,7 @@ require_once 'RegistrationData.php';
 require_once 'Enums.php';
 require_once 'LaunchInfo.php';
 require_once 'RegistrationSummary.php';
+require_once 'DebugLogger.php';
 
 	/// <summary>
    	/// Client-side proxy for the "rustici.registration.*" Hosted SCORM Engine web
@@ -110,7 +111,7 @@ class RegistrationService{
             $request->setMethodParams($params);
             $response = $request->CallService("rustici.registration.exists");
             $xml = simplexml_load_string($response);
-            error_log($xml->result);
+            write_log($xml->result);
             return ($xml->result == 'true');
         }
   

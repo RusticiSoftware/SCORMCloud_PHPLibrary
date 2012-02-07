@@ -30,6 +30,7 @@
 
 
 require_once 'Configuration.php';
+require_once 'DebugLogger.php';
 
 class ServiceRequest{
 	
@@ -110,7 +111,7 @@ class ServiceRequest{
 		
 		$url .= '?'.$this->signParams($this->_configuration->getSecurityKey(),$parameterMap);
 		
-		error_log("SCORM Cloud ConstructUrl : ".$url);
+		write_log("SCORM Cloud ConstructUrl : ".$url);
 		
 		return $url;
 	}
@@ -127,7 +128,7 @@ class ServiceRequest{
 
             $xmlDoc = simplexml_load_string($xmlString);
             $rspElements = $xmlDoc;
-			error_log('stat : '.$rspElements["stat"]);
+			write_log('stat : '.$rspElements["stat"]);
 			if($rspElements["stat"]!='ok')
 			{
 				$errmsg = "";

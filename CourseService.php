@@ -33,6 +33,7 @@ require_once 'CourseData.php';
 require_once 'Enums.php';
 require_once 'UploadService.php';
 require_once 'ImportResult.php';
+require_once 'DebugLogger.php';
 
 /// <summary>
 /// Client-side proxy for the "rustici.course.*" Hosted SCORM Engine web
@@ -125,7 +126,7 @@ class CourseService{
 		$request->setMethodParams($params);
         $response = $request->CallService("rustici.course.importCourse");
 
-		error_log('rustici.course.importCourse : '.$response);
+		write_log('rustici.course.importCourse : '.$response);
 		
 		$importResult = new ImportResult(null);
 		return $importResult->ConvertToImportResults($response);
@@ -148,7 +149,7 @@ class CourseService{
 		$request->setMethodParams($params);
 		
        	$response = $request->CallService("rustici.course.versionCourse");
-		error_log('rustici.course.versionCourse : '.$response);
+		write_log('rustici.course.versionCourse : '.$response);
         //return ImportResult->ConvertToImportResults($response);
     }
 
@@ -158,7 +159,7 @@ class CourseService{
         $request->setMethodParams($params);
         $response = $request->CallService("rustici.course.exists");
         $xml = simplexml_load_string($response);
-        error_log($xml->result);
+        write_log($xml->result);
         return ($xml->result == 'true');
     }
 
