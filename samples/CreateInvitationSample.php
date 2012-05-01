@@ -28,23 +28,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-	<title>untitled</title>
-	
-</head>
-
-<body>
-<?php
-require_once("config.php");
 require_once('../ScormEngineService.php');
-
+require_once('../ServiceRequest.php');
+require_once('config.php');
 global $CFG;
 
 $ServiceUrl = $CFG->scormcloudurl;
@@ -52,28 +39,17 @@ $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
 $Origin = $CFG->scormcloudorigin;
 
+$courseid = $_POST['courseid'];
+$send = $_POST['send'] == 'on' ? 'true' : 'false';
+$public = $_POST['public'] == 'on' ? 'true' : 'false';
+$creatingUserEmail = $_POST['creatingUserEmail'];
+$addresses = $_POST['addresses'];
+
 $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
-$courseService = $ScormService->getCourseService();
+$invService = $ScormService->getInvitationService();
 
-					
-//$importurl = $CFG->wwwroot."/ImportFinish.php";
-$courseListUrl = $CFG->wwwroot."/CourseListSample.php";
-//$cloudUploadLink = $uploadService->GetUploadUrl($importurl)
- 
-$courseId = uniqid();
-$cloudUploadLink = $courseService->GetImportCourseUrl($courseId,$courseListUrl);
+$response = $invService->CreateInvitation($courseid,$public,$send, $addresses, null, null, $creatingUserEmail);
 
-
-?>	
-
-	
-<form action="<?php echo $cloudUploadLink; ?>" method="post" enctype="multipart/form-data">
-<label for="file">Filename:</label>
-<input type="file" name="filedata" id="file" /> 
-<br />
-<input type="submit" name="submit" value="Submit" />
-</form>
-<br><br>
-
-</body>
-</html>
+header('Location: '.$CFG->wwwroot.'/CourseInvitationList.php?courseid='.$courseid) ;
+//echo $response;
+?>

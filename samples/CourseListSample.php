@@ -99,7 +99,9 @@ foreach($allResults as $course)
 	echo '</td><td>';
 	echo '<a href="CoursePropertiesSample.php?courseid='.$course->getCourseId().'">properties</a>';
 	echo '</td><td>';
-	$prevUrl = $courseService->GetPreviewUrl($course->getCourseId(),$CFG->wwwroot."/CourseListSample.php");
+	echo '<a href="CourseInvitationList.php?courseid='.$course->getCourseId().'">invitations</a>';
+	echo '</td><td>';
+	$prevUrl = $courseService->GetPreviewUrl($course->getCourseId(),$CFG->wwwroot."/CourseListSample.php","http://troymac/sandbox/testCloudStyles.css");
 	echo '<a href="'.$prevUrl.'">Preview</a>';
 	echo '</td></tr>';
 }

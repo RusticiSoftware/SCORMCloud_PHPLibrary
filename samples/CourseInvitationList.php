@@ -36,15 +36,19 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>untitled</title>
+	<title>Course Invitation List</title>
 	
 </head>
 
 <body>
-<?php
-require_once("config.php");
-require_once('../ScormEngineService.php');
+<a href="CourseListSample.php">Course List</a>
 
+<h2>Course Invitations</h2>
+<br/><br/>
+<?php
+require_once('../ScormEngineService.php');
+require_once('../ServiceRequest.php');
+require_once('config.php');
 global $CFG;
 
 $ServiceUrl = $CFG->scormcloudurl;
@@ -52,28 +56,69 @@ $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
 $Origin = $CFG->scormcloudorigin;
 
+$courseid = $_GET['courseid'];
+
 $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
-$courseService = $ScormService->getCourseService();
 
-					
-//$importurl = $CFG->wwwroot."/ImportFinish.php";
-$courseListUrl = $CFG->wwwroot."/CourseListSample.php";
-//$cloudUploadLink = $uploadService->GetUploadUrl($importurl)
- 
-$courseId = uniqid();
-$cloudUploadLink = $courseService->GetImportCourseUrl($courseId,$courseListUrl);
+$invService = $ScormService->getInvitationService();
+
+$response = $invService->GetInvitationList(null,$courseid);
+
+$xml = simplexml_load_string($response);
+
+?>
+<table border="1" cellpadding="5">
+<?php
+
+foreach ($xml->invitationlist->invitationInfo as $invInfo)
+{
+	echo '<tr>';
+	echo "<td>" . $invInfo->createdDate . "</td>";
+	echo "<td>" . $invInfo->subject . "</td>";
+	echo "<td><a href='InvitationInfo.php?invid=" . $invInfo->id . "'>details</a></td>";
+	if ($invInfo->allowLaunch == "true"){
+		echo "<td><a href='InvitationChangeStatus.php?courseid=".$courseid."&invid=" . $invInfo->id . "&enable=false'>active</a></td>";
+	} else {
+		echo "<td><a href='InvitationChangeStatus.php?courseid=".$courseid."&invid=" . $invInfo->id . "&enable=true'>inactive</a></td>";
+	}
+	if ($invInfo->public == "true"){
+		if ($invInfo->allowNewRegistrations == "true"){
+			echo "<td><a href='InvitationChangeStatus.php?courseid=".$courseid."&invid=" . $invInfo->id . "&enable=" . $invInfo->allowLaunch . "&open=false'>open</a></td>";
+		} else {
+			echo "<td><a href='InvitationChangeStatus.php?courseid=".$courseid."&invid=" . $invInfo->id . "&enable=" . $invInfo->allowLaunch . "&open=true'>closed</a></td>";
+		}
+	} else {
+		echo "<td>(not public)</td>";
+	}
+	echo '</tr>';
+}
 
 
-?>	
+?>
 
+</table>
+<br/><br/>
+<h3>Create new invitation</h3>
+<form action="CreateInvitationSample.php" method="post" enctype="multipart/form-data">
 	
-<form action="<?php echo $cloudUploadLink; ?>" method="post" enctype="multipart/form-data">
-<label for="file">Filename:</label>
-<input type="file" name="filedata" id="file" /> 
+<input type="hidden" name="courseid" value="<?= $courseid?>"  />
+<br/>
+Sender email: <input type="text" name="creatingUserEmail">
+<br/>
+<input type="checkbox" name="send"> send
+<br/>
+<input type="checkbox" name="public"> public
+<br />
+To addresses: <input type="text" name="addresses"> (comma-delimited)
 <br />
 <input type="submit" name="submit" value="Submit" />
 </form>
-<br><br>
+
+
+
+<br/><br/>
+<!--<textarea style="height:600px;width:1000px;"><?=$response?></textarea>-->
+
 
 </body>
 </html>

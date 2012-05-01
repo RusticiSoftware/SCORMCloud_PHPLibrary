@@ -36,15 +36,19 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>untitled</title>
+	<title>Invitation Info</title>
 	
 </head>
 
 <body>
-<?php
-require_once("config.php");
-require_once('../ScormEngineService.php');
+<a href="CourseListSample.php">Course List</a>
 
+<h2>Invitation Info</h2>
+<br/><br/>
+<?php
+require_once('../ScormEngineService.php');
+require_once('../ServiceRequest.php');
+require_once('config.php');
 global $CFG;
 
 $ServiceUrl = $CFG->scormcloudurl;
@@ -52,28 +56,25 @@ $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
 $Origin = $CFG->scormcloudorigin;
 
+$invId = $_GET['invid'];
+
 $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
-$courseService = $ScormService->getCourseService();
 
-					
-//$importurl = $CFG->wwwroot."/ImportFinish.php";
-$courseListUrl = $CFG->wwwroot."/CourseListSample.php";
-//$cloudUploadLink = $uploadService->GetUploadUrl($importurl)
- 
-$courseId = uniqid();
-$cloudUploadLink = $courseService->GetImportCourseUrl($courseId,$courseListUrl);
+$invService = $ScormService->getInvitationService();
+
+$response = $invService->GetInvitationInfo($invId, 'true');
+
+$status = $invService->GetInvitationStatus($invId);
+$xml = simplexml_load_string($status);
+$strStatus = $xml->status;
 
 
-?>	
 
-	
-<form action="<?php echo $cloudUploadLink; ?>" method="post" enctype="multipart/form-data">
-<label for="file">Filename:</label>
-<input type="file" name="filedata" id="file" /> 
-<br />
-<input type="submit" name="submit" value="Submit" />
-</form>
-<br><br>
+?>
+<h2>Status:  <?=$strStatus?></h2>
+
+<textarea style="height:600px;width:1000px;"><?=$response?></textarea>
+
 
 </body>
 </html>

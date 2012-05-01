@@ -40,6 +40,7 @@
 require_once 'Configuration.php';
 require_once 'ServiceRequest.php';
 require_once 'CourseService.php';
+require_once 'InvitationService.php';
 require_once 'RegistrationService.php';
 require_once 'UploadService.php';
 require_once 'ReportingService.php';
@@ -63,6 +64,7 @@ class ScormEngineService{
     private $_accountService = null;
 	private $_debugService = null;
     private $_dispatchService = null;
+	private $_invitationService = null;
 
 	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString) {
 
@@ -76,6 +78,7 @@ class ScormEngineService{
         $this->_accountService = new AccountService($this->_configuration);
 		$this->_debugService = new DebugService($this->_configuration);
         $this->_dispatchService = new DispatchService($this->_configuration);
+		$this->_invitationService = new InvitationService($this->_configuration);
         //$_ftpService = new FtpService(configuration);
 	}
 	
@@ -184,6 +187,16 @@ class ScormEngineService{
     public function getDispatchService()
     {
         return $this->_dispatchService;
+    }
+
+	/**
+	* <summary>
+    * Contains SCORM Engine Invitation functionality.
+    * </summary>
+	*/
+    public function getInvitationService()
+    {
+        return $this->_invitationService;
     }
 
 	/**

@@ -30,6 +30,7 @@
 
 
 require_once('../ScormEngineService.php');
+require_once('../ServiceRequest.php');
 require_once('config.php');
 global $CFG;
 
@@ -38,18 +39,20 @@ $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
 $Origin = $CFG->scormcloudorigin;
 
+$courseid = $_GET['courseid'];
+$invId = $_GET['invid'];
+$enable = $_GET['enable'];
+$open = $_GET['open'];
+
+
 $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
-$courseService = $ScormService->getCourseService();
 
-$courseId = uniqid();
+$invService = $ScormService->getInvitationService();
 
+$response = $invService->ChangeStatus($invId, $enable, $open);
 
-$importResult = $courseService->ImportUploadedCourse($courseId,$_GET['location']);
+//$xml = simplexml_load_string($response);
 
-
-//echo var_dump($importResult);
-
-header( 'Location: '.$CFG->wwwroot.'/CourseListSample.php' ) ;
-
-
+header('Location: '.$CFG->wwwroot.'/CourseInvitationList.php?courseid='.$courseid) ;
+//echo $response;
 ?>
