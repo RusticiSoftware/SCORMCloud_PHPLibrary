@@ -127,6 +127,7 @@ class ServiceRequest{
         {
 
             $xmlDoc = simplexml_load_string($xmlString);
+
             $rspElements = $xmlDoc;
 			write_log('stat : '.$rspElements["stat"]);
 			if($rspElements["stat"]!='ok')
@@ -218,7 +219,7 @@ class ServiceRequest{
     {
         $signing = '';
         $values = array();
-        ksort($params);
+        ksort($params, SORT_STRING | SORT_FLAG_CASE);
 
         foreach($params as $key => $value) {
             $signing .= $key . $value;
