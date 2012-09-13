@@ -34,7 +34,7 @@ class Configuration{
 	private $_appId = null;
     private $_securityKey = null;
     private $_scormEngineServiceUrl = null;
-    private $_originString = 'rusticisoftware.phplibrary.1.2.1';
+    private $_originString = 'rusticisoftware.phplibrary.1.3.1';
 
 	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString) {
 		//echo $scormEngineServiceUrl;
