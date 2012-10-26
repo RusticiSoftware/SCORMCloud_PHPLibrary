@@ -36,6 +36,7 @@ class RegistrationData
     {
         private $_registrationId;
         private $_courseId;
+		private $_data;
        // private int numberOfInstances;
 
         /// <summary>
@@ -48,6 +49,7 @@ class RegistrationData
 			//$xml = simplexml_load_string($regDataEl);
             $this->_registrationId = $xml["id"];
             $this->_courseId = $xml["courseid"];
+			$this->_data = $xml;
             //this.numberOfInstances = Convert.ToInt32(regDataEl.Attributes["instances"].Value);
         }
 
@@ -90,6 +92,11 @@ class RegistrationData
         public function getCourseId()
         {
             return $this->_courseId;
+        }
+
+		public function getData()
+        {
+            return $this->_data;
         }
 
 //        /// <summary>
