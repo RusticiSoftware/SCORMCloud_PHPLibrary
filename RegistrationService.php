@@ -201,7 +201,21 @@ class RegistrationService{
 			$regArray = $regData->ConvertToRegistrationDataList($response);
 			return $regArray;
         }
-        
+        /// <summary>
+        /// Returns the detail of a registration
+        /// </summary>
+        /// <param name="regIdFilterRegex">Optional registration id filter</param>
+        /// <returns></returns>
+        public function GetRegistrationDetail($registrationId)
+        {
+			$enum = new Enum();
+            $request = new ServiceRequest($this->_configuration);
+			$params = array('regid' => $registrationId);
+			$request->setMethodParams($params);
+            $response = $request->CallService("rustici.registration.getRegistrationDetail");
+            // Return the subset of the xml starting with the top <summary>
+            return $response;
+        }
         /// <summary>
         /// Returns a list of registration id's along with their associated course
         /// </summary>
