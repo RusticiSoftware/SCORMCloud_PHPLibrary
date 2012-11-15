@@ -170,14 +170,15 @@ class RegistrationService{
             $reportElem = $xml->registrationreport;
             return new RegistrationSummary($reportElem);
         }
-
+        
+        
         /// <summary>
         /// Returns a list of registration id's along with their associated course
         /// </summary>
         /// <param name="regIdFilterRegex">Optional registration id filter</param>
         /// <param name="courseIdFilterRegex">Option course id filter</param>
         /// <returns></returns>
-        public function GetRegistrationList($regIdFilterRegex, $courseIdFilterRegex)
+        public function GetRegistrationList($regIdFilterRegex, $courseIdFilterRegex, $learnerid)
         {
             $request = new ServiceRequest($this->_configuration);
 			$params = array();
@@ -188,6 +189,11 @@ class RegistrationService{
             if (isset($courseIdFilterRegex))
 			{
 				$params['coursefilter'] = $courseIdFilterRegex;
+			}
+			
+			if (isset($learnerid))
+			{
+				$params['learnerid'] = $learnerid;
 			}
             $request->setMethodParams($params);
 
@@ -201,6 +207,7 @@ class RegistrationService{
 			$regArray = $regData->ConvertToRegistrationDataList($response);
 			return $regArray;
         }
+        
         /// <summary>
         /// Returns the detail of a registration
         /// </summary>
@@ -208,14 +215,13 @@ class RegistrationService{
         /// <returns></returns>
         public function GetRegistrationDetail($registrationId)
         {
-			$enum = new Enum();
-            $request = new ServiceRequest($this->_configuration);
+			$request = new ServiceRequest($this->_configuration);
 			$params = array('regid' => $registrationId);
 			$request->setMethodParams($params);
             $response = $request->CallService("rustici.registration.getRegistrationDetail");
-            // Return the subset of the xml starting with the top <summary>
             return $response;
         }
+        
         /// <summary>
         /// Returns a list of registration id's along with their associated course
         /// </summary>
@@ -406,4 +412,3 @@ class RegistrationService{
 		
 	}
 }
-?>

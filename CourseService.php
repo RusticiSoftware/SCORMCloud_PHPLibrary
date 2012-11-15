@@ -80,23 +80,9 @@ class CourseService{
     	return $response;
     }
     
+    ///function VersionCourse has been deprecated from the course service 
+    
     /// <summary>
-    /// Import new version of an existing course from a SCORM .pif (zip file)
-    /// on the local filesystem.
-    /// </summary>
-    /// <param name="courseId">Unique Identifier for this course.</param>
-    /// <param name="absoluteFilePathToZip">Full path to the .zip file</param>
-    /// <returns>List of Import Results</returns>
-    public function VersionCourse($courseId, $absoluteFilePathToZip)
-    {
-        $request = new ServiceRequest($this->_configuration);
-        $params = array('courseid' => $courseId);
-		$request->setMethodParams($params);
-        $request->setFileToPost($absoluteFilePathToZip);
-        $response = $request->CallService("rustici.course.versionCourse");
-        return $response;
-    }
-     /// <summary>
      /// Import a SCORM .pif (zip file) from an existing .zip file on the
      /// Hosted SCORM Engine server.
      /// </summary>
@@ -132,27 +118,14 @@ class CourseService{
 		return $importResult->ConvertToImportResults($response);
      }
 
-    /// <summary>
-    /// Import new version of an existing course from a SCORM .pif (zip file) from 
-    /// an existing .zip file on the Hosted SCORM Engine server.
-    /// </summary>
-    /// <param name="courseId">Unique Identifier for this course.</param>
-    /// <param name="domain">Optional security domain for the file.</param>
-    /// <param name="fileName">Name of the file, including extension.</param>
-    /// <returns>List of Import Results</returns>
-    public function VersionUploadedCourse($courseId, $path, $permissionDomain = null)
-    {
+     ///function VersionCourse has been deprecated from the course service 
 
-        $request = new ServiceRequest($this->_configuration);
-       	$params = array('courseid'=>$courseId,
-						'path'=>$path);
-		$request->setMethodParams($params);
-		
-       	$response = $request->CallService("rustici.course.versionCourse");
-		write_log('rustici.course.versionCourse : '.$response);
-        //return ImportResult->ConvertToImportResults($response);
-    }
-
+     /// <summary>
+     /// Check the existence of a course with the given courseId
+     /// configured appId.
+     /// </summary>
+  	/// <param name="courseId">courseId of the course to check for</param>
+     /// <returns>boolean value</returns>
     public function Exists($courseId) {
         $request = new ServiceRequest($this->_configuration);
         $params = array('courseid'=>$courseId);
@@ -200,7 +173,7 @@ class CourseService{
         $response = $request->CallService("rustici.course.deleteCourse");
 		return $response;
     }
-
+    
     /// <summary>
     /// Delete the specified version of a course
     /// </summary>
@@ -215,90 +188,107 @@ class CourseService{
         $response = $request->CallService("rustici.course.deleteCourse");
 		return $response;
     }
-	 /// <summary>
-        /// Get the Course Metadata in XML Format
-        /// </summary>
-        /// <param name="courseId">Unique Identifier for the course</param>
-        /// <param name="versionId">Version of the specified course</param>
-        /// <param name="scope">Defines the scope of the data to return: Course or Activity level</param>
-        /// <param name="format">Defines the amount of data to return:  Summary or Detailed</param>
-        /// <returns>XML string representing the Metadata</returns>
-	    public function GetMetadata($courseId, $versionId, $scope, $format)
-	    {
-			$enum = new Enum();
-            $request = new ServiceRequest($this->_configuration);
-			$params = array('courseid'=>$courseId);
-            
-            if (isset($versionId) && $versionId != 0)
-            {
-                $params['versionid'] = $versionId;
-            }
-            $params['scope'] = $enum->getMetadataScope($scope);
-            $params['mdformat'] = $enum->getDataFormat($format);
-			
-			$request->setMethodParams($params);
-			
-            $response = $request->CallService("rustici.course.getMetadata");
-            
-            // Return the subset of the xml starting with the top <object>
-            return $response;
-	    }
-	
-	    /// <summary>
-        /// Get the url that can be opened in a browser and used to preview this course, without
-        /// the need for a registration.
-        /// </summary>
-        /// <param name="courseId">Unique Course Identifier</param>
-        /// <param name="versionId">Version Id</param>
-        public function GetPreviewUrl($courseId, $redirectOnExitUrl, $cssUrl = null)
+    
+    /// <summary>
+    /// Get the Course Details in XML Format
+    /// </summary>
+    /// <param name="courseId">Unique Identifier for the course</param>
+    public function GetCourseDetail($courseId)
+    {
+        $request = new ServiceRequest($this->_configuration);
+       	$params = array('courseid'=>$courseId);
+       	$request->setMethodParams($params);
+        return $request->CallService("rustici.course.getCourseDetail");
+    }
+    
+	/// <summary>
+    /// Get the Course Metadata in XML Format
+    /// </summary>
+    /// <param name="courseId">Unique Identifier for the course</param>
+    /// <param name="versionId">Version of the specified course</param>
+    /// <param name="scope">Defines the scope of the data to return: Course or Activity level</param>
+    /// <param name="format">Defines the amount of data to return:  Summary or Detailed</param>
+    /// <returns>XML string representing the Metadata</returns>
+    public function GetMetadata($courseId, $versionId, $scope, $format)
+    {
+		$enum = new Enum();
+        $request = new ServiceRequest($this->_configuration);
+		$params = array('courseid'=>$courseId);
+        
+        if (isset($versionId) && $versionId != 0)
         {
-            $request = new ServiceRequest($this->_configuration);
-            $params = array('courseid' => $courseId);
-            if(isset($redirectOnExitUrl))
-			{
-                $params['redirecturl'] = $redirectOnExitUrl;
-			}
-            if(isset($cssUrl))
-			{
-                $params['cssurl'] = $cssUrl;
-			} 
-			$request->SetMethodParams($params);
-				
-            return $request->ConstructUrl("rustici.course.preview");
+            $params['versionid'] = $versionId;
         }
+        $params['scope'] = $enum->getMetadataScope($scope);
+        $params['mdformat'] = $enum->getDataFormat($format);
+		
+		$request->setMethodParams($params);
+		
+        $response = $request->CallService("rustici.course.getMetadata");
+        
+        // Return the subset of the xml starting with the top <object>
+        return $response;
+    }
 
-        /// <summary>
-        /// Gets the url to view/edit the package properties for this course.  Typically
-        /// used within an IFRAME
-        /// </summary>
-        /// <param name="courseId">Unique Identifier for the course</param>
-        /// <returns>Signed URL to package property editor</returns>
-        /// <param name="notificationFrameUrl">Tells the property editor to render a sub-iframe
-        /// with the provided url as the src.  This can be used to simulate an "onload"
-        /// by using a notificationFrameUrl that's the same domain as the host system and
-        /// calling parent.parent.method()</param>
-        public function GetPropertyEditorUrl($courseId, $stylesheetUrl, $notificationFrameUrl)
-        {
-            // The local parameter map just contains method methodParameters.  We'll
-            // now create a complete parameter map that contains the web-service
-            // params as well the actual method params.
-			$request = new ServiceRequest($this->_configuration);
+    /// <summary>
+    /// Get the url that can be opened in a browser and used to preview this course, without
+    /// the need for a registration.
+    /// </summary>
+    /// <param name="courseId">Unique Course Identifier</param>
+    /// <param name="versionId">Version Id</param>
+    public function GetPreviewUrl($courseId, $redirectOnExitUrl, $cssUrl = null)
+    {
+        $request = new ServiceRequest($this->_configuration);
+        $params = array('courseid' => $courseId);
+        if(isset($redirectOnExitUrl))
+		{
+            $params['redirecturl'] = $redirectOnExitUrl;
+		}
+        if(isset($cssUrl))
+		{
+            $params['cssurl'] = $cssUrl;
+		} 
+		$request->SetMethodParams($params);
+			
+        return $request->ConstructUrl("rustici.course.preview");
+    }
 
-            $parameterMap = array('courseid' => $courseId);
-			$parameterMap['editor'] = "latest";
+    /// <summary>
+    /// Gets the url to view/edit the package properties for this course.  Typically
+    /// used within an IFRAME
+    /// </summary>
+    /// <param name="courseId">Unique Identifier for the course</param>
+    /// <returns>Signed URL to package property editor</returns>
+    /// <param name="notificationFrameUrl">Tells the property editor to render a sub-iframe
+    /// with the provided url as the src.  This can be used to simulate an "onload"
+    /// by using a notificationFrameUrl that's the same domain as the host system and
+    /// calling parent.parent.method()</param>
+    public function GetPropertyEditorUrl($courseId, $stylesheetUrl, $notificationFrameUrl)
+    {
+        // The local parameter map just contains method methodParameters.  We'll
+        // now create a complete parameter map that contains the web-service
+        // params as well the actual method params.
+		$request = new ServiceRequest($this->_configuration);
 
-            if(isset($notificationFrameUrl)){
-                $parameterMap['notificationframesrc'] = $notificationFrameUrl;
-			}
-            if(isset($stylesheetUrl)){
-                $parameterMap['cssurl'] = $stylesheetUrl;
-			}
+        $parameterMap = array('courseid' => $courseId);
+		$parameterMap['editor'] = "latest";
 
-            $request->setMethodParams($parameterMap);
-            return $request->ConstructUrl("rustici.course.properties");
-        }
+        if(isset($notificationFrameUrl)){
+            $parameterMap['notificationframesrc'] = $notificationFrameUrl;
+		}
+        if(isset($stylesheetUrl)){
+            $parameterMap['cssurl'] = $stylesheetUrl;
+		}
 
+        $request->setMethodParams($parameterMap);
+        return $request->ConstructUrl("rustici.course.properties");
+    }
 
+    /// <summary>
+    /// Get the url that can be targeted by a form to upload and import a course into SCORM Cloud
+    /// </summary>
+    /// <param name="courseId">Unique Course Identifier</param>
+    /// <param name="redirectUrl">the url location the browser will be redirected to when the import is finished</param>
     public function GetImportCourseUrl($courseId, $redirectUrl)
     {
     	$request = new ServiceRequest($this->_configuration);
@@ -307,6 +297,7 @@ class CourseService{
     	$request->setMethodParams($params);
     	return $request->ConstructUrl('rustici.course.importCourse');
     }
+    
     
     public function GetUpdateAssetsUrl($courseId, $redirectUrl)
     {
