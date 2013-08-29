@@ -99,9 +99,9 @@ echo "<br/><br/>";
 
 
 
-write_log('Getting listActiviyProviders');
+write_log('Getting listActivityProviders');
 
-$allResults = $lrsAccountService->listActiviyProviders();
+$allResults = $lrsAccountService->listActivityProviders();
 
 write_log('AccountList count = '.count($allResults));
 

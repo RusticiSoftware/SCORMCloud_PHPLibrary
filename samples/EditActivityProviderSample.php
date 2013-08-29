@@ -68,7 +68,7 @@ $Origin = $CFG->scormcloudorigin;
 	$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 
 	$lrsAccountService = $ScormService->getLrsAccountService();
-	$lrsAccountService->editActiviyProvider($key, $enabled, $authtype, $label);
+	$lrsAccountService->editActivityProvider($key, $enabled, $authtype, $label);
 
 	echo 'Succes!';
 

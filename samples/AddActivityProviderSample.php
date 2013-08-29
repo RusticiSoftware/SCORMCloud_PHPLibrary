@@ -42,7 +42,7 @@ $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 
 $lrsAccountService = $ScormService->getLrsAccountService();
 //echo gettype($courseService);
-$lrsAccountService->createActiviyProvider();
+$lrsAccountService->createActivityProvider();
 
 //echo 'Course '.$courseid.' deleted';
 header( 'Location: '.$CFG->wwwroot.'/ActivityProviderListSample.php' ) ;

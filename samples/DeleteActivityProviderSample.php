@@ -47,7 +47,7 @@ $accountKey = $_GET['accountKey'];
 
 
 //echo gettype($courseService);
-$lrsAccountService->deleteActiviyProvider($accountKey);
+$lrsAccountService->deleteActivityProvider($accountKey);
 
 //echo 'Course '.$courseid.' deleted';
 header( 'Location: '.$CFG->wwwroot.'/ActivityProviderListSample.php' ) ;

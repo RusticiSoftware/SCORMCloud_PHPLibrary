@@ -51,12 +51,12 @@ class LrsAccountService{
 	/// <summary>
     /// Create new Activity Provider
     /// <returns>LCreated activity provider</returns>
-    public function createActiviyProvider()
+    public function createActivityProvider()
     {
     	$request = new ServiceRequest($this->_configuration);
-        $response = $request->CallService("rustici.lrsaccount.createActiviyProvider");
+        $response = $request->CallService("rustici.lrsaccount.createActivityProvider");
 
-        write_log('rustici.lrsaccont.createActiviyProvider : '.$response);
+        write_log('rustici.lrsaccont.createActivityProvider : '.$response);
         
         $lrsAccountResult = new LrsAccount($response);
     	
@@ -69,12 +69,12 @@ class LrsAccountService{
      /// </summary>
      
      /// <returns>List of Activity Providers</returns>
-     public function listActiviyProviders()
+     public function listActivityProviders()
      {
         $request = new ServiceRequest($this->_configuration);
-        $response = $request->CallService("rustici.lrsaccount.listActiviyProviders");
+        $response = $request->CallService("rustici.lrsaccount.listActivityProviders");
 
-        write_log('rustici.lrsaccount.listActiviyProviders : '.$response);
+        write_log('rustici.lrsaccount.listActivityProviders : '.$response);
         
         $lrsAccountResult = LrsAccount::ConvertToLrsAcountList($response);
         
@@ -86,7 +86,7 @@ class LrsAccountService{
      /// </summary>
      
      /// <returns>List of Activity Providers</returns>
-     public function editActiviyProvider($accountKey, $isActive = null, $authType = null, $label = null)
+     public function editActivityProvider($accountKey, $isActive = null, $authType = null, $label = null)
      {
         $request = new ServiceRequest($this->_configuration);
 
@@ -107,9 +107,9 @@ class LrsAccountService{
         }
 
         $request->setMethodParams($params);
-        $response = $request->CallService("rustici.lrsaccount.editActiviyProvider");
+        $response = $request->CallService("rustici.lrsaccount.editActivityProvider");
 
-        write_log('rustici.lrsaccount.editActiviyProviders : '.$response);
+        write_log('rustici.lrsaccount.editActivityProviders : '.$response);
         
         $lrsAccountResult = new LrsAccount($response);
         
@@ -122,15 +122,15 @@ class LrsAccountService{
      /// </summary>
      
      /// <returns>List of Activity Providers</returns>
-     public function deleteActiviyProvider($accountKey)
+     public function deleteActivityProvider($accountKey)
      {
         $request = new ServiceRequest($this->_configuration);
         $params = array('accountkey'=>$accountKey);
 
         $request->setMethodParams($params);
-        $response = $request->CallService("rustici.lrsaccount.deleteActiviyProvider");
+        $response = $request->CallService("rustici.lrsaccount.deleteActivityProvider");
 
-        write_log('rustici.lrsaccount.deleteActiviyProvider : '.$response);
+        write_log('rustici.lrsaccount.deleteActivityProvider : '.$response);
      }
 
      /// <summary>
