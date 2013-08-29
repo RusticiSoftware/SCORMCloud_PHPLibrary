@@ -46,7 +46,6 @@ class LrsAccountService{
 	
 	public function __construct($configuration) {
 		$this->_configuration = $configuration;
-		//echo $this->_configuration->getAppId();
 	}
 	
 	/// <summary>
@@ -76,7 +75,6 @@ class LrsAccountService{
         $response = $request->CallService("rustici.lrsaccount.listActiviyProviders");
 
         write_log('rustici.lrsaccount.listActiviyProviders : '.$response);
-        error_log( $response);
         
         $lrsAccountResult = LrsAccount::ConvertToLrsAcountList($response);
         
