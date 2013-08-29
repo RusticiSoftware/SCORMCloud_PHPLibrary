@@ -6,13 +6,13 @@ require_once('../ServiceRequest.php');
 require_once('config.php');
 global $CFG;
 
-$appId = $CFG->scormcloudappid; // e.g. 'KIRZ8HS2O0';
+$appId = $CFG->scormcloudappid; 
 $pwd = $CFG->scormcloudsecretkey;
 $conf = new Configuration('http://cloud.scorm.com/EngineWebServices', $appId, $pwd);
 $srvc = new ReportingService($conf);
 
-//$learnerId = "a-specific-learner-id-here";
-$courseId = "Golf_SequencingPreOrPostTestRollup_SCORM20043rdEdition1d3760b5-7d9d-4776-960b-ed5962abbae2";
+echo 'Manually add Course ID to test';
+$courseId = ""; // Add course ID for quick testing.
 
 $homePage = "/Reportage/reportage.php?appId=$appId";
 //$learnerPage = $homePage . "&learnerId=$learnerId";
