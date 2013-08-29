@@ -48,6 +48,7 @@ require_once 'TaggingService.php';
 require_once 'AccountService.php';
 require_once 'DebugService.php';
 require_once 'DispatchService.php';
+require_once 'LrsAccountService.php';
 
 require_once 'DebugLogger.php';
 
@@ -65,6 +66,7 @@ class ScormEngineService{
 	private $_debugService = null;
     private $_dispatchService = null;
 	private $_invitationService = null;
+    private $_lrsAccountService = null;
 
 	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString) {
 
@@ -79,6 +81,7 @@ class ScormEngineService{
 		$this->_debugService = new DebugService($this->_configuration);
         $this->_dispatchService = new DispatchService($this->_configuration);
 		$this->_invitationService = new InvitationService($this->_configuration);
+        $this->_lrsAccountService = new LrsAccountService($this->_configuration);
         //$_ftpService = new FtpService(configuration);
 	}
 	
@@ -197,6 +200,16 @@ class ScormEngineService{
     public function getInvitationService()
     {
         return $this->_invitationService;
+    }
+
+    /**
+    * <summary>
+    * Contains SCORM Engine Activity provider functionality.
+    * </summary>
+    */
+    public function getLrsAccountService()
+    {
+        return $this->_lrsAccountService;
     }
 
 	/**
