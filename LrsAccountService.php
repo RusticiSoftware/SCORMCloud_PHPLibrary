@@ -50,7 +50,7 @@ class LrsAccountService{
 	
 	/// <summary>
     /// Create new Activity Provider
-    /// <returns>LCreated activity provider</returns>
+    /// <returns>Created activity provider</returns>
     public function createActivityProvider()
     {
     	$request = new ServiceRequest($this->_configuration);
@@ -85,7 +85,7 @@ class LrsAccountService{
      /// edit activity provider.
      /// </summary>
      
-     /// <returns>List of Activity Providers</returns>
+     /// <returns>Activity Provider</returns>
      public function editActivityProvider($accountKey, $isActive = null, $authType = null, $label = null)
      {
         $request = new ServiceRequest($this->_configuration);
@@ -121,7 +121,6 @@ class LrsAccountService{
      /// delete specified activity provider
      /// </summary>
      
-     /// <returns>List of Activity Providers</returns>
      public function deleteActivityProvider($accountKey)
      {
         $request = new ServiceRequest($this->_configuration);
@@ -136,8 +135,6 @@ class LrsAccountService{
      /// <summary>
      /// Set App Lrs Auth Callback URL. 
      /// </summary>
-     
-     /// <returns>List of Activity Providers</returns>
      public function setAppLrsAuthCallbackUrl($callBackUrl)
      {
         $request = new ServiceRequest($this->_configuration);
