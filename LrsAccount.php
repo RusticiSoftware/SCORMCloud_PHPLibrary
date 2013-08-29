@@ -65,7 +65,6 @@ class LrsAccount
         /// <returns></returns>
         public static function ConvertToLrsAcountList($xmlDoc)
         {
-			//echo '$xmlDoc='.$xmlDoc;
 			$allResults = array();
             $xml = simplexml_load_string($xmlDoc);
 			if(false === $xml)
