@@ -49,9 +49,9 @@ class LrsAccount
         public function __construct($xml)
         {
             $this->_accountKey = (string)$xml->accountKey;
-            error_log($this->_accountKey);
+            
             $this->_accountEnabled = (boolean)$xml->accountEnabled;
-			$this->_accountLabel = (string)$xml->accountLabel;
+	    $this->_accountLabel = (string)$xml->accountLabel;
             $this->_accountAuthType = (string)$xml->accountAuthType;
             $this->_accountSecret = (string)$xml->accountSecret;
         }
