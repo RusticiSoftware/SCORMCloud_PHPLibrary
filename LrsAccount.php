@@ -2,7 +2,7 @@
 
 /* Software License Agreement (BSD License)
  * 
- * Copyright (c) 2010-2011, Rustici Software, LLC
+ * Copyright (c) 2013, Rustici Software, LLC
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
