@@ -2,7 +2,7 @@
 
 /* Software License Agreement (BSD License)
  * 
- * Copyright (c) 2010-2011, Rustici Software, LLC
+ * Copyright (c) 2013, Rustici Software, LLC
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -37,12 +37,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>Course List Sample</title>
+	<title>Activity Provider List Sample</title>
 	
 </head>
 
 <body>
-<h2>Course List Sample</h2>
+<h2>Activity Provider List Sample</h2>
 
 
 <?php
@@ -59,6 +59,29 @@ write_log('Creating ScormEngineService');
 $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 write_log('ScormEngineService Created');
 
+write_log('Creating lrsAccountService');
+$lrsAccountService = $ScormService->getLrsAccountService();
+write_log('lrsAccountService Created');
+
+if(isset($_POST['submit']))
+{
+	$url = $_REQUEST['callbackurl'];
+	$lrsAccountService->setAppLrsAuthCallbackUrl($url);
+
+	echo 'Succes!';
+
+}
+
+echo '<form action="ActivityProviderListSample.php" method="POST">';
+?>
+<h3>Set Auth CallBack Url</h3>
+URL: <input type="text" name="callbackurl" /><br/>
+<input type="submit" name="submit" value="Submit" />
+</form>
+<br/><br/>
+<?php
+
+
 $debugService = $ScormService->getdebugService();
 if ($debugService->CloudPing()){
 	echo "<p style='color:green'>CloudPing call was successful.</p>";
@@ -71,51 +94,44 @@ if ($debugService->CloudAuthPing()){
 	echo "<p style='color:red'>CloudAuthPing call was not successful.</p>";
 }
 echo "<br/><br/>";
-echo '<a href="ImportSample.php">Import New Package</a>';
+echo '<a href="AddActivityProviderSample.php">Add Activity Provider</a>';
 echo "<br/><br/>";
 
-write_log('Creating CourseService');
-$courseService = $ScormService->getCourseService();
-write_log('CourseService Created');
 
-write_log('Getting CourseList');
-$allResults = $courseService->GetCourseList();
-write_log('CourseList count = '.count($allResults));
+
+write_log('Getting listActivityProviders');
+
+$allResults = $lrsAccountService->listActivityProviders();
+
+write_log('AccountList count = '.count($allResults));
 
 echo '<table border="1" cellpadding="5">';
-echo '<tr><td>Course Id</td><td>Title</td><td>Registrations</td><td></td><td>metadata</td><td>Properties</td> </tr>';
-foreach($allResults as $course)
+echo '<tr><td>Label</td><td>Key</td><td>Secret</td><td>Is Active</td><td>Auth Type</td><td>Edit</td><td>Delete</td> </tr>';
+foreach($allResults as $lrsAccount)
 {
 	echo '<tr><td>';
-	echo $course->getCourseId();
+	echo $lrsAccount->getAccountLabel();
 	echo '</td><td>';
-	echo $course->getTitle();
+	echo $lrsAccount->getAccountKey();
 	echo '</td><td>';
-	echo '<a href="RegistrationListSample.php?courseid='.$course->getCourseId().'">'.$course->getNumberOfRegistrations().'</a>';
+	echo $lrsAccount->getAccountSecret();
 	echo '</td><td>';
-	echo '<a href="DeletePackageSample.php?id='.$course->getCourseId().'">Delete Package</a>';
+	echo $lrsAccount->getAccountEnabled();
 	echo '</td><td>';
-	echo '<a href="CourseMetadataSample.php?courseid='.$course->getCourseId().'">metadata</a>';
+	echo $lrsAccount->getAccountAuthType();
 	echo '</td><td>';
-	echo '<a href="CoursePropertiesSample.php?courseid='.$course->getCourseId().'">properties</a>';
+	echo '<a href="EditActivityProviderSample.php?accountKey='.$lrsAccount->getAccountKey().
+		'&accountLabel='.$lrsAccount->getAccountLabel().
+		'&accountEnabled='.$lrsAccount->getAccountEnabled().
+		'&accountAuthType='.$lrsAccount->getAccountAuthType().
+		'">edit</a>';
 	echo '</td><td>';
-	echo '<a href="CourseInvitationList.php?courseid='.$course->getCourseId().'">invitations</a>';
-	echo '</td><td>';
-	$prevUrl = $courseService->GetPreviewUrl($course->getCourseId(),$CFG->wwwroot."/CourseListSample.php","http://troymac/sandbox/testCloudStyles.css");
-	echo '<a href="'.$prevUrl.'">Preview</a>';
-	echo '</td><td>';
-	echo '<a href="CourseExistsSample.php?courseid='.$course->getCourseId().'">Exists?</a>';
+	echo '<a href="DeleteActivityProviderSample.php?accountKey='.$lrsAccount->getAccountKey().'">delete</a>';
 	echo '</td</tr>';
 }
 echo '</table><br/><br/>';
 
-$reportService = $ScormService->getReportingService();
-$repAuth = $reportService->GetReportageAuth("freenav",true);
-$reportageUrl = $reportService->GetReportageServiceUrl()."Reportage/reportage.php?appId=".$AppId;
-$reportUrl = $reportService->GetReportUrl($repAuth,$reportageUrl);
 
-
-echo '<h3><a href="'.$reportUrl.'">Go to reportage for your App Id.</a></h3>';
 
 ?>
 </body>
