@@ -46,12 +46,23 @@ class LrsAccount
         /// Constructor which takes an XML node as returned by the web service.
         /// </summary>
         /// <param name="regDataEl"></param>
-        public function __construct($xml)
+        public function __construct($xmlDoc)
         {
-            $this->_accountKey = (string)$xml->accountKey;
+            $xml = null;
+
+            if($xmlDoc instanceof SimpleXMLElement)
+            {
+                $xml = $xmlDoc;
+            }
+            else
+            {
+                $xml = simplexml_load_string($xmlDoc);  
+                $xml = $xml->activityProvider;  
+            }
             
+            $this->_accountKey = (string)$xml->accountKey;            
             $this->_accountEnabled = (boolean)$xml->accountEnabled;
-	    $this->_accountLabel = (string)$xml->accountLabel;
+	        $this->_accountLabel = (string)$xml->accountLabel;
             $this->_accountAuthType = (string)$xml->accountAuthType;
             $this->_accountSecret = (string)$xml->accountSecret;
         }
