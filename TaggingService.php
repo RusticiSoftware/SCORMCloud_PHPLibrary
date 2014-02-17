@@ -90,6 +90,26 @@ class TaggingService{
         $response = $request->CallService("rustici.tagging.removeLearnerTag");
         return $response;
     }
+
+        public function AddRegistrationTag($regId, $tag)
+    {
+        $request = new ServiceRequest($this->_configuration);
+        $params = array('regid' => $regId,
+                        'tag' => $tag);
+        $request->setMethodParams($params);
+        $response = $request->CallService("rustici.tagging.addRegistrationTag");
+        return $response;
+    }
+    
+    public function RemoveRegistrationTag($regId, $tag)
+    {
+        $request = new ServiceRequest($this->_configuration);
+        $params = array('regid' => $regId,
+                        'tag' => $tag);
+        $request->setMethodParams($params);
+        $response = $request->CallService("rustici.tagging.removeRegistrationTag");
+        return $response;
+    }
 }
     
 ?>
