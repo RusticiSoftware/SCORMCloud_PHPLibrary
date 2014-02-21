@@ -62,9 +62,9 @@ $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 $regService = $ScormService->getRegistrationService();
 
 if(isset($courseid)){
-	$allResults = $regService->GetRegistrationList(null,$courseid,null);
+	$allResults = $regService->GetRegistrationList($courseid,null);
 }else{
-	$allResults = $regService->GetRegistrationList(null,null,null);
+	$allResults = $regService->GetRegistrationList(null,null);
 }
 
 
