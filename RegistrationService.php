@@ -175,37 +175,28 @@ class RegistrationService{
         /// <summary>
         /// Returns a list of registration id's along with their associated course
         /// </summary>
-        /// <param name="regIdFilterRegex">Optional registration id filter</param>
-        /// <param name="courseIdFilterRegex">Option course id filter</param>
+        /// <param name="courseId>Option course id filter</param>
+        /// <param name="learnerId>Option learner id filter</param>
         /// <returns></returns>
-        public function GetRegistrationList($regIdFilterRegex, $courseIdFilterRegex, $learnerid)
+        public function GetRegistrationList($courseId, $learnerId)
         {
             $request = new ServiceRequest($this->_configuration);
-			$params = array();
-            if (isset($regIdFilterRegex))
-			{
-                $params['filter'] = $regIdFilterRegex;
-			}
-            if (isset($courseIdFilterRegex))
-			{
-				$params['coursefilter'] = $courseIdFilterRegex;
-			}
-			
-			if (isset($learnerid))
-			{
-				$params['learnerid'] = $learnerid;
-			}
+	    $params = array();
+            if (isset($courseId))
+	      {
+		$params['courseid'] = $courseId;
+	      }
+	    if (isset($learnerId))
+	      {
+		$params['learnerid'] = $learnerId;
+	      }
             $request->setMethodParams($params);
 
             $response = $request->CallService("rustici.registration.getRegistrationList");
-
-			//echo $response;
-
-			$regData = new RegistrationData(null);
-			
+	    $regData = new RegistrationData(null);
             // Return the subset of the xml starting with the top <summary>
-			$regArray = $regData->ConvertToRegistrationDataList($response);
-			return $regArray;
+	    $regArray = $regData->ConvertToRegistrationDataList($response);
+	    return $regArray;
         }
         
         /// <summary>
@@ -225,34 +216,32 @@ class RegistrationService{
         /// <summary>
         /// Returns a list of registration id's along with their associated course
         /// </summary>
-        /// <param name="regIdFilterRegex">Optional registration id filter</param>
-        /// <param name="courseIdFilterRegex">Option course id filter</param>
+        /// <param name="courseId">Option course id filter</param>
+        /// <param name="learnerId">Optional learner id filter</param>
+        /// <param name="resultsFormat">Optional set format of results</param>
         /// <returns></returns>
-        public function GetRegistrationListResults($regIdFilterRegex, $courseIdFilterRegex, $resultsFormat)
+        public function GetRegistrationListResults($courseId, $learnerId, $resultsFormat)
         {
             $enum = new Enum();
             $request = new ServiceRequest($this->_configuration);
-			$params = array();
-            if (isset($regIdFilterRegex))
-			{
-                $params['filter'] = $regIdFilterRegex;
-			}
-            if (isset($courseIdFilterRegex))
-			{
-				$params['coursefilter'] = $courseIdFilterRegex;
-			}
+	    $params = array();
+            if (isset($courseId))
+	      {
+                $params['courseid'] = $courseId;
+	      }
+            if (isset($learnerId))
+	      {
+		$params['learnerid'] = $learnerId;
+	      }
             if (isset($resultsFormat))
-			{
-				$params['resultsformat'] = $enum->getRegistrationResultsFormat($resultsFormat);
-			}
+	      {
+		$params['resultsformat'] = $enum->getRegistrationResultsFormat($resultsFormat);
+	      }
             
             $request->setMethodParams($params);
 
             $response = $request->CallService("rustici.registration.getRegistrationListResults");
-
-			//echo $response;
-
-			return $response;
+	    return $response;
         }
 
 
