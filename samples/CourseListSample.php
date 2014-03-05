@@ -101,7 +101,7 @@ foreach($allResults as $course)
 	echo '</td><td>';
 	echo '<a href="CourseInvitationList.php?courseid='.$course->getCourseId().'">invitations</a>';
 	echo '</td><td>';
-	$prevUrl = $courseService->GetPreviewUrl($course->getCourseId(),$CFG->wwwroot."/CourseListSample.php","http://troymac/sandbox/testCloudStyles.css");
+	$prevUrl = $courseService->GetPreviewUrl($course->getCourseId(),$CFG->wwwroot."/CourseListSample.php","https://cloud.scorm.com/sc/css/cloudPlayer/cloudstyles.css");
 	echo '<a href="'.$prevUrl.'">Preview</a>';
 	echo '</td><td>';
 	echo '<a href="CourseExistsSample.php?courseid='.$course->getCourseId().'">Exists?</a>';
