@@ -68,9 +68,9 @@ class ScormEngineService{
 	private $_invitationService = null;
     private $_lrsAccountService = null;
 
-	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString) {
-
+	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString, $proxy=null) {
 		$this->_configuration = new Configuration($scormEngineServiceUrl, $appId, $securityKey, $originString);
+        $this->_configuration->setProxy($proxy);
 		$this->_serviceRequest = new ServiceRequest($this->_configuration);
         $this->_courseService = new CourseService($this->_configuration);
         $this->_registrationService = new RegistrationService($this->_configuration);
