@@ -62,7 +62,7 @@ $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 $regService = $ScormService->getRegistrationService();
 
 if(isset($courseid)){
-	$allResults = $regService->GetRegistrationList(null,$courseid);
+	$allResults = $regService->GetRegistrationList($courseid,null);
 }else{
 	$allResults = $regService->GetRegistrationList(null,null);
 }
@@ -70,12 +70,25 @@ if(isset($courseid)){
 
 
 echo '<form action="CreateRegistrationSample.php" method="GET">';
-echo '<input type="hidden" name="courseid" value="'.$courseid.'"/>';
 ?>
 <h3>Create New Registration</h3>
 Email: <input type="text" name="learnerid" /><br/>
 First Name:<input type="text" name="learnerfirstname" /><br/>
 Last Name:<input type="text" name="learnerlastname" /><br/>
+<?php
+if (isset($courseid)){
+	echo '<input type="hidden" name="courseid" value="'.$courseid.'"/>';
+}else{
+	echo '<select name="courseid">';
+	$courseService = $ScormService->getCourseService();
+	$allCourses = $courseService->GetCourseList();
+	foreach($allCourses as $course)
+	{
+		echo '<option value="'.$course->getCourseId().'">'.$course->getTitle().'</option>';
+	}
+	echo '</select><br/>';
+}
+?>
 <input type="submit" name="submit" value="Submit" />
 </form>
 <br/><br/>

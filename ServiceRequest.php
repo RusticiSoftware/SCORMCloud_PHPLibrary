@@ -46,7 +46,7 @@ class ServiceRequest{
 	private $_configuration = null;
 	private $_methodParams = array();
 	private $_fileToPost = null;
-	
+
 	public function __construct($configuration) {
 		$this->_configuration = $configuration;
 		$this->_methodParams['applib'] = 'php';
@@ -62,10 +62,15 @@ class ServiceRequest{
 	{
 		$this->_fileToPost = $fileName;
 	}
+
+    public function setProxy($proxy) {
+        if (is_string($proxy)) {
+            $this->_curlProxy = $proxy;
+        }
+    }
 	
 	public function CallService($methodName, $serviceUrl = null)
 	{
-		
 		$postParams = null;
 		if(isset($this->_fileToPost))
 		{
@@ -80,7 +85,8 @@ class ServiceRequest{
 		$url = $this->ConstructUrl($methodName, $serviceUrl);
 
 		//echo $url.'<br><br>';
-		$responseText = $this->submitHttpPost($url,$postParams);
+        $curlProxy = $this->_configuration->getProxy();
+		$responseText = $this->submitHttpPost($url,$postParams, self::TIMEOUT_TOTAL, $curlProxy);
 		//error_log($responseText);
         $response = $this->AssertNoErrorAndReturnXml($responseText);
 
@@ -163,13 +169,12 @@ class ServiceRequest{
      * @uses    set_time_limit() to ensure that PHP's script timer is five
      *          seconds longer than the sum of $timeout and TIMEOUT_CONNECTION.
      */
-    static function submitHttpPost($url, $postParams = null, $timeout = self::TIMEOUT_TOTAL)
+    static function submitHttpPost($url, $postParams = null,  $timeout = self::TIMEOUT_TOTAL ,$curlProxy = null)
     {
 		//foreach($postParams as $key => $value)
 		//{
 		//	echo $key.'='.$value.'<br>';
 		//}
-	
         $ch = curl_init();
 
         // set up the request
@@ -192,6 +197,11 @@ class ServiceRequest{
 
 		//set header expect empty for upload issue...
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
+
+        //set proxy
+        if (!empty($curlProxy)) {
+            curl_setopt($ch ,CURLOPT_PROXY, $curlProxy);
+        }
 
         // set the PHP script's timeout to be greater than CURL's
         set_time_limit(self::TIMEOUT_CONNECTION + $timeout + 5);
@@ -233,6 +243,9 @@ class ServiceRequest{
 
         return implode('&', $values);
     }
+
+
+
 }
 
 ?>

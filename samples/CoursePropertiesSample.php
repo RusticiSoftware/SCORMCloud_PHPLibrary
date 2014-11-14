@@ -78,7 +78,29 @@ $attributes = $courseService->GetAttributes($courseId);
 <br/><br/>
 <h2>Direct Attribute Updates:</h2>
 
+<form action="CoursePropertiesSample.php" method="Get">
+	
+	Attribute:<select name="att">
+		<?php
+		foreach ($attributes as $key => $value)
+        {
+			if ($value == 'true' || $value == 'false')
+			{
+				echo "<option value='" .$key."'>" .$key."</option>";
+			}
+        }
 
+		?>	
+	</select>
+	
+	&nbsp;&nbsp;&nbsp;
+    <select name="attval">
+            <option value="true">true</option>
+            <option value="false">false</option>
+    </select>
+	<input type="hidden" name="courseid" value="<?php echo $courseId; ?>"/>
+	<input type="submit" value="submit"/>
+</form>
 
 <form action="CoursePropertiesSample.php" method="Get">
 	
@@ -86,22 +108,17 @@ $attributes = $courseService->GetAttributes($courseId);
 		<?php
 		foreach ($attributes as $key => $value)
         {
-            if ($value == 'true' || $value == 'false')
+			if ($value != 'true' && $value != 'false')
 			{
 				echo "<option value='" .$key."'>" .$key."</option>";
 			}
         }
 
-		?>
-		
+		?>	
 	</select>
 	
 	&nbsp;&nbsp;&nbsp;
-	<select name="attval">
-		<option value=""></option>
-		<option value="true">true</option>
-		<option value="false">false</option>
-	</select>
+	<input type="text" name="attval">
 	<input type="hidden" name="courseid" value="<?php echo $courseId; ?>"/>
 	<input type="submit" value="submit"/>
 </form>

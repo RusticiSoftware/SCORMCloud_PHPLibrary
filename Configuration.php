@@ -36,6 +36,8 @@ class Configuration{
     private $_scormEngineServiceUrl = null;
     private $_originString = 'rusticisoftware.phplibrary.1.3.1';
 
+    private $_proxy = null;
+
 	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString) {
 		//echo $scormEngineServiceUrl;
 		//echo $appId;
@@ -100,5 +102,13 @@ class Configuration{
 	{
 		$this->_originString = $originString;
 	}
+
+    public function setProxy($proxy) {
+        $this->_proxy = $proxy;
+    }
+
+    public function getProxy() {
+        return $this->_proxy;
+    }
 }
 ?>

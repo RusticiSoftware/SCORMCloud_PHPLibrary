@@ -83,7 +83,7 @@ $allResults = $courseService->GetCourseList();
 write_log('CourseList count = '.count($allResults));
 
 echo '<table border="1" cellpadding="5">';
-echo '<tr><td>Course Id</td><td>Title</td><td>Registrations</td><td></td><td>metadata</td><td>Properties</td> </tr>';
+echo '<tr><td>Course Id</td><td>Title</td><td>Registrations</td><td></td><td>metadata</td><td>Detail</td><td>Properties</td> </tr>';
 foreach($allResults as $course)
 {
 	echo '<tr><td>';
@@ -97,11 +97,13 @@ foreach($allResults as $course)
 	echo '</td><td>';
 	echo '<a href="CourseMetadataSample.php?courseid='.$course->getCourseId().'">metadata</a>';
 	echo '</td><td>';
+	echo '<a href="CourseDetailSample.php?courseid='.$course->getCourseId().'">detail</a>';
+	echo '</td><td>';
 	echo '<a href="CoursePropertiesSample.php?courseid='.$course->getCourseId().'">properties</a>';
 	echo '</td><td>';
 	echo '<a href="CourseInvitationList.php?courseid='.$course->getCourseId().'">invitations</a>';
 	echo '</td><td>';
-	$prevUrl = $courseService->GetPreviewUrl($course->getCourseId(),$CFG->wwwroot."/CourseListSample.php","http://troymac/sandbox/testCloudStyles.css");
+	$prevUrl = $courseService->GetPreviewUrl($course->getCourseId(),$CFG->wwwroot."/CourseListSample.php","https://cloud.scorm.com/sc/css/cloudPlayer/cloudstyles.css");
 	echo '<a href="'.$prevUrl.'">Preview</a>';
 	echo '</td><td>';
 	echo '<a href="CourseExistsSample.php?courseid='.$course->getCourseId().'">Exists?</a>';
