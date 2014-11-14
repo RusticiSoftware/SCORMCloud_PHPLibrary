@@ -60,7 +60,7 @@ function testDestinationMethods(){
         }
 
         //Create our test destination
-        $newDestId = $dispatchService->createDestination( "phplibtest", array("php","test") );
+        $newDestId = $dispatchService->createDestination( "phplibtest", array("test") );
 
         //Check to make sure it's in our list
         $dests = $dispatchService->GetDestinationList(1, array("test"));
@@ -79,7 +79,7 @@ function testDestinationMethods(){
         }
 
         //Update the info
-        $dispatchService->UpdateDestination($newDestId, "phplibtest2", array("php2","test2"));
+        $dispatchService->UpdateDestination($newDestId, "phplibtest2", array("test2"));
 
         //Check all the info
         $dest = $dispatchService->GetDestinationInfo($newDestId);
@@ -89,7 +89,7 @@ function testDestinationMethods(){
         if($dest->getName() != "phplibtest2"){
             throw new Exception("Expected phplibtest2, got " . $dest->getName());
         }
-        if(!in_array("php2", $dest->getTags()) || !in_array("test2", $dest->getTags())){
+        if(!in_array("test2", $dest->getTags())){
             throw new Exception("Tags were not updated properly for new destination");
         }
 
@@ -125,10 +125,10 @@ function testDispatchMethods($testCourseId) {
         }
 
         //Create our test destination
-        $newDestId = $dispatchService->createDestination( "phplibtest", array("php","test") );
+        $newDestId = $dispatchService->createDestination( "phplibtest", array("test") );
 
         //Create our test dispatch
-        $newDispatchId = $dispatchService->CreateDispatch($newDestId, $testCourseId, array("php","test"));
+        $newDispatchId = $dispatchService->CreateDispatch($newDestId, $testCourseId, array("test"));
 
         //Find our new test dispatch
         $dispatches = $dispatchService->GetDispatchList(1);
