@@ -41,17 +41,9 @@ $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 
 $dispService = $ScormService->getDispatchService();
 
-$regId = uniqid(rand(), true);
 $destname = $_GET['destname'] ;
 $desttags = $_GET['desttags'];
 
-//echo $regId . '<br>';
-//echo $courseId . '<br>';
-//echo $learnerId . '<br>';
-//echo $learnerFirstName . '<br>';
-//echo $learnerLastName . '<br>';
-
-//CreateRegistration($registrationId, $courseId, $learnerId, $learnerFirstName, $learnerLastName)
 $dispService->CreateDestination($destname, $desttags);
 
 header('Location: '.$CFG->wwwroot.'/DispatchListSample.php') ;
