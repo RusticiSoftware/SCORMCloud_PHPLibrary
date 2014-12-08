@@ -49,6 +49,7 @@ require_once 'AccountService.php';
 require_once 'DebugService.php';
 require_once 'DispatchService.php';
 require_once 'LrsAccountService.php';
+require_once 'ApplicationService.php';
 
 require_once 'DebugLogger.php';
 
@@ -67,9 +68,10 @@ class ScormEngineService{
     private $_dispatchService = null;
 	private $_invitationService = null;
     private $_lrsAccountService = null;
+    private $_applicationService = null;
 
-	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString, $proxy=null) {
-		$this->_configuration = new Configuration($scormEngineServiceUrl, $appId, $securityKey, $originString);
+	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $originString, $proxy=null, $appManager=null, $managerKey=null) {
+		$this->_configuration = new Configuration($scormEngineServiceUrl, $appId, $securityKey, $appManager, $managerKey, $originString);
         $this->_configuration->setProxy($proxy);
 		$this->_serviceRequest = new ServiceRequest($this->_configuration);
         $this->_courseService = new CourseService($this->_configuration);
@@ -82,6 +84,7 @@ class ScormEngineService{
         $this->_dispatchService = new DispatchService($this->_configuration);
 		$this->_invitationService = new InvitationService($this->_configuration);
         $this->_lrsAccountService = new LrsAccountService($this->_configuration);
+        $this->_applicationService = new ApplicationService($this->_configuration);
         //$_ftpService = new FtpService(configuration);
 	}
 	
@@ -210,6 +213,16 @@ class ScormEngineService{
     public function getLrsAccountService()
     {
         return $this->_lrsAccountService;
+    }
+
+    /**
+    * <summary>
+    * Contains SCORM Engine Activity provider functionality.
+    * </summary>
+    */
+    public function getApplicationService()
+    {
+        return $this->_applicationService;
     }
 
 	/**

@@ -36,17 +36,15 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>Registration List Sample</title>
+	<title>Application List Sample</title>
 	
 </head>
 
 <body>
-<a href="CourseListSample.php">Course List</a>
-<br/><br/>
 <?php
 require_once('../ScormEngineService.php');
 require_once('../ServiceRequest.php');
-require_once('../CourseData.php');
+require_once('../ApplicationData.php');
 require_once('config.php');
 global $CFG;
 
@@ -54,40 +52,21 @@ $ServiceUrl = $CFG->scormcloudurl;
 $AppId = $CFG->scormcloudappid;
 $SecretKey = $CFG->scormcloudsecretkey;
 $Origin = $CFG->scormcloudorigin;
+$AppManagerId = $CFG->scormcloudappmanagerid;
+$ManagerSecretKey = $CFG->scormcloudmanagersecretkey;
 
-$courseid = $_GET['courseid'];
+$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin, null, $AppManagerId, $ManagerSecretKey);
+$appService = $ScormService->getApplicationService();
 
-$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
-
-$regService = $ScormService->getRegistrationService();
-
-if(isset($courseid)){
-	$allResults = $regService->GetRegistrationList($courseid,null);
-}else{
-	$allResults = $regService->GetRegistrationList(null,null);
-}
+$allResults = $appService->GetAppList();
 
 
 
-echo '<form action="CreateRegistrationSample.php" method="GET">';
+echo '<form action="CreateApplicationSample.php" method="GET">';
 ?>
-<h3>Create New Registration</h3>
-Email: <input type="text" name="learnerid" /><br/>
-First Name:<input type="text" name="learnerfirstname" /><br/>
-Last Name:<input type="text" name="learnerlastname" /><br/>
+<h3>Create New Application</h3>
+Name: <input type="text" name="name" /><br/>
 <?php
-if (isset($courseid)){
-	echo '<input type="hidden" name="courseid" value="'.$courseid.'"/>';
-}else{
-	echo '<select name="courseid">';
-	$courseService = $ScormService->getCourseService();
-	$allCourses = $courseService->GetCourseList();
-	foreach($allCourses as $course)
-	{
-		echo '<option value="'.$course->getCourseId().'">'.$course->getTitle().'</option>';
-	}
-	echo '</select><br/>';
-}
 ?>
 <input type="submit" name="submit" value="Submit" />
 </form>
@@ -97,40 +76,19 @@ if (isset($courseid)){
 
 
 echo '<table border="1" cellpadding="5">';
-echo '<tr><td></td><td>Registration Id</td><td>Course Id</td><td>completion</td><td>success</td><td>total time</td><td>score</td><td></td></tr>';
+echo '<tr><td>App Id</td><td>Name</td><td>Create Date</td></tr>';
 foreach($allResults as $result)
 {
-	$launchUrl = $regService->GetLaunchUrl($result->getRegistrationId(),$CFG->wwwroot."RegistrationListSample.php?courseid=".$courseid);
-	echo '<tr><td>';
-	echo '<a class="thickbox" href="'.$launchUrl.'" >Launch</a>';
+	echo '<td>';
+	echo $result->getAppId();
 	echo '</td><td>';
-	echo $result->getRegistrationId();
+	echo $result->getName();
 	echo '</td><td>';
-	echo $result->getCourseId();
-	echo '</td><td>';
-	$regResults = $regService->GetRegistrationResult($result->getRegistrationId(),0,'xml');
-	//echo $regResults;
-	$xmlResults = simplexml_load_string($regResults);
-	echo $xmlResults->registrationreport->complete;
-	echo '</td><td>';
-	echo $xmlResults->registrationreport->success;
-	echo '</td><td>';
-	echo $xmlResults->registrationreport->totaltime;
-	echo '</td><td>';
-	echo $xmlResults->registrationreport->score;
-	echo '</td><td>';
-	echo '<a href="LaunchHistorySample.php?regid='.$result->getRegistrationId().'">Launch History</a>';
+	echo $result->getCreateDate();
 	echo '</td></tr>';
 }
 echo '</table><br/><br/>';
 
-$reportService = $ScormService->getReportingService();
-$repAuth = $reportService->GetReportageAuth("freenav",true);
-$reportageUrl = $reportService->GetReportageServiceUrl()."Reportage/reportage.php?appId=".$AppId."&courseId=".$courseid;
-$reportUrl = $reportService->GetReportUrl($repAuth,$reportageUrl);
-
-
-echo '<h3><a href="'.$reportUrl.'">Go to reportage for this course.</a></h3>';
 ?>
 </body>
 </html>
