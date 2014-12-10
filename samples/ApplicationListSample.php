@@ -79,7 +79,7 @@ echo '<table border="1" cellpadding="5">';
 echo '<tr><td>App Id</td><td>Name</td><td>Create Date</td></tr>';
 foreach($allResults as $result)
 {
-	echo '<td>';
+	echo '<tr><td>';
 	echo $result->getAppId();
 	echo '</td><td>';
 	echo $result->getName();
