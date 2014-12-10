@@ -28,18 +28,28 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/// Configuration File 
-require_once('../ScormEngineUtilities.php');
-unset($CFG);
+require_once('../ScormEngineService.php');
+require_once('config.php');
+global $CFG;
 
-$CFG->wwwroot = '';  // e.g. "http://localhost/PhpLibrary/samples/";
+require_once('../ScormEngineService.php');
+require_once('../ServiceRequest.php');
+require_once('../ApplicationData.php');
+require_once('config.php');
+global $CFG;
 
-//Rustici Software SCORM Cloud API Key Settings
-$CFG->scormcloudurl = 'http://cloud.scorm.com/EngineWebServices/';
-$CFG->scormcloudsecretkey = ''; // e.g. '3nrJQ50o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
-$CFG->scormcloudappid = ''; // e.g. '321WUXJHRT';
-$CFG->scormcloudmanagersecretkey = ''; // e.g. 'JQ53nr0o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
-$CFG->scormcloudappmanagerid = ''; // e.g. '123WUXJHRT';
-$CFG->scormcloudorigin = ScormEngineUtilities::getCanonicalOriginString('Your Company', 'Your Application', 'Version 2.0');
+$ServiceUrl = $CFG->scormcloudurl;
+$AppId = $CFG->scormcloudappid;
+$SecretKey = $CFG->scormcloudsecretkey;
+$Origin = $CFG->scormcloudorigin;
+$AppManagerId = $CFG->scormcloudappmanagerid;
+$ManagerSecretKey = $CFG->scormcloudmanagersecretkey;
+
+$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin, null, $AppManagerId, $ManagerSecretKey);
+$appService = $ScormService->getApplicationService();
+
+$name = $_GET['name'] ;
+
+$appService->CreateApplication($name);
 
 ?>

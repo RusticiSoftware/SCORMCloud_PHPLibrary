@@ -2,7 +2,7 @@
 
 /* Software License Agreement (BSD License)
  * 
- * Copyright (c) 2010-2011, Rustici Software, LLC
+ * Copyright (c) 2010-2014, Rustici Software, LLC
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -100,7 +100,7 @@ echo '<table border="1" cellpadding="5">';
 echo '<tr><td></td><td>Registration Id</td><td>Course Id</td><td>completion</td><td>success</td><td>total time</td><td>score</td><td></td></tr>';
 foreach($allResults as $result)
 {
-	$launchUrl = $regService->GetLaunchUrl($result->getRegistrationId(),$CFG->wwwroot."/RegistrationListSample.php?courseid=".$courseid);
+	$launchUrl = $regService->GetLaunchUrl($result->getRegistrationId(),$CFG->wwwroot."RegistrationListSample.php?courseid=".$courseid);
 	echo '<tr><td>';
 	echo '<a class="thickbox" href="'.$launchUrl.'" >Launch</a>';
 	echo '</td><td>';

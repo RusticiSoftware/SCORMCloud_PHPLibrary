@@ -2,7 +2,7 @@
 
 /* Software License Agreement (BSD License)
  * 
- * Copyright (c) 2010-2011, Rustici Software, LLC
+ * Copyright (c) 2010-2014, Rustici Software, LLC
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -92,15 +92,46 @@ class ServiceRequest{
 
         return $response;
 	}
+
+    public function CallManagerService($methodName, $serviceUrl = null)
+    {
+        $postParams = null;
+
+        $url = $this->ConstructManagerUrl($methodName, $serviceUrl);
+        echo $url.'<br><br>';
+        $curlProxy = $this->_configuration->getProxy();
+        $responseText = $this->submitHttpPost($url,$postParams, self::TIMEOUT_TOTAL, $curlProxy);
+        //error_log($responseText);
+        $response = $this->AssertNoErrorAndReturnXml($responseText);
+
+        return $response;
+    }
+
+    public function ConstructUrl($methodName, $serviceUrl = null)
+    {
+        return $this->ConstructAppAgnosticUrl($this->_configuration->getAppId(), 
+                                        $this->_configuration->getSecurityKey(), 
+                                        $methodName, 
+                                        $serviceUrl);
+    }
+
+    public function ConstructManagerUrl($methodName, $serviceUrl = null)
+    {
+        return $this->ConstructAppAgnosticUrl($this->_configuration->getAppManagerId(), 
+                                        $this->_configuration->getManagerSecurityKey(), 
+                                        $methodName, 
+                                        $serviceUrl);
+    }
 	
-	public function ConstructUrl($methodName, $serviceUrl = null)
+	public function ConstructAppAgnosticUrl($appId, $secretKey, $methodName, $serviceUrl = null)
 	{
 		//error_log('serviceUrl = '.$serviceUrl);
 		$parameterMap = array(	'method' => $methodName,
-								'appid' => $this->_configuration->getAppId(),
+								'appid' => $appId,
 								'origin' => $this->_configuration->getOriginString(),
 								'ts' => gmdate("YmdHis")
 							);
+
 		array_merge($parameterMap,$this->_methodParams);
 		foreach($this->_methodParams as $key => $value)
 		{
@@ -115,7 +146,7 @@ class ServiceRequest{
 		}
 	
 		
-		$url .= '?'.$this->signParams($this->_configuration->getSecurityKey(),$parameterMap);
+		$url .= '?'.$this->signParams($secretKey,$parameterMap);
 		
 		write_log("SCORM Cloud ConstructUrl : ".$url);
 		

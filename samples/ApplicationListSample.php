@@ -28,18 +28,67 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/// Configuration File 
-require_once('../ScormEngineUtilities.php');
-unset($CFG);
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-$CFG->wwwroot = '';  // e.g. "http://localhost/PhpLibrary/samples/";
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-//Rustici Software SCORM Cloud API Key Settings
-$CFG->scormcloudurl = 'http://cloud.scorm.com/EngineWebServices/';
-$CFG->scormcloudsecretkey = ''; // e.g. '3nrJQ50o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
-$CFG->scormcloudappid = ''; // e.g. '321WUXJHRT';
-$CFG->scormcloudmanagersecretkey = ''; // e.g. 'JQ53nr0o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
-$CFG->scormcloudappmanagerid = ''; // e.g. '123WUXJHRT';
-$CFG->scormcloudorigin = ScormEngineUtilities::getCanonicalOriginString('Your Company', 'Your Application', 'Version 2.0');
+	<title>Application List Sample</title>
+	
+</head>
+
+<body>
+<?php
+require_once('../ScormEngineService.php');
+require_once('../ServiceRequest.php');
+require_once('../ApplicationData.php');
+require_once('config.php');
+global $CFG;
+
+$ServiceUrl = $CFG->scormcloudurl;
+$AppId = $CFG->scormcloudappid;
+$SecretKey = $CFG->scormcloudsecretkey;
+$Origin = $CFG->scormcloudorigin;
+$AppManagerId = $CFG->scormcloudappmanagerid;
+$ManagerSecretKey = $CFG->scormcloudmanagersecretkey;
+
+$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin, null, $AppManagerId, $ManagerSecretKey);
+$appService = $ScormService->getApplicationService();
+
+$allResults = $appService->GetAppList();
+
+
+
+echo '<form action="CreateApplicationSample.php" method="GET">';
+?>
+<h3>Create New Application</h3>
+Name: <input type="text" name="name" /><br/>
+<?php
+?>
+<input type="submit" name="submit" value="Submit" />
+</form>
+<br/><br/>
+<?php
+
+
+
+echo '<table border="1" cellpadding="5">';
+echo '<tr><td>App Id</td><td>Name</td><td>Create Date</td></tr>';
+foreach($allResults as $result)
+{
+	echo '<tr><td>';
+	echo $result->getAppId();
+	echo '</td><td>';
+	echo $result->getName();
+	echo '</td><td>';
+	echo $result->getCreateDate();
+	echo '</td></tr>';
+}
+echo '</table><br/><br/>';
 
 ?>
+</body>
+</html>
