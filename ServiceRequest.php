@@ -192,7 +192,6 @@ class ServiceRequest{
      * @param   integer $timeout The total number of seconds, including the
      *          wait for the initial connection, wait for a request to complete.
      * @return  string
-     * @throws  Phlickr_ConnectionException
      * @uses    TIMEOUT_CONNECTION to determine how long to wait for a
      *          for a connection.
      * @uses    TIMEOUT_TOTAL to determine how long to wait for a request
@@ -243,10 +242,8 @@ class ServiceRequest{
             curl_close($ch);
             return $result;
         } else {
-            //$ex = new Phlickr_ConnectionException(
-            //echo 'Request failed. '.curl_error($ch);
+            error_log('Request to '.$url.' failed. ERROR: '.curl_error($ch));
             curl_close($ch);
-            //throw $ex;
         }
     }
 
