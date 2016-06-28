@@ -34,12 +34,13 @@ require_once 'Enums.php';
 require_once 'UploadService.php';
 require_once 'ImportResult.php';
 require_once 'DebugLogger.php';
+require_once 'ICourseService.php';
 
 /// <summary>
 /// Client-side proxy for the "rustici.course.*" Hosted SCORM Engine web
 /// service methods.  
 /// </summary>
-class CourseService{
+class CourseService implements ICourseService {
 	
 	private $_configuration = null;
 	

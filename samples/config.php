@@ -27,19 +27,40 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-/// Configuration File 
+/// Configuration File
 require_once('../ScormEngineUtilities.php');
 unset($CFG);
 
-$CFG->wwwroot = '';  // e.g. "http://localhost/PhpLibrary/samples/";
+if(!Configuration::$useNewAPI)
+{
 
-//Rustici Software SCORM Cloud API Key Settings
-$CFG->scormcloudurl = 'http://cloud.scorm.com/EngineWebServices/';
-$CFG->scormcloudsecretkey = ''; // e.g. '3nrJQ50o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
-$CFG->scormcloudappid = ''; // e.g. '321WUXJHRT';
-$CFG->scormcloudmanagersecretkey = ''; // e.g. 'JQ53nr0o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
-$CFG->scormcloudappmanagerid = ''; // e.g. '123WUXJHRT';
-$CFG->scormcloudorigin = ScormEngineUtilities::getCanonicalOriginString('Your Company', 'Your Application', 'Version 2.0');
+    //LWS Settings (the old way)
+    $CFG->wwwroot = '';  // e.g. "http://localhost/PhpLibrary/samples/";
 
+    //Rustici Software SCORM Cloud API Key Settings
+    $CFG->scormcloudurl = 'http://cloud.scorm.com/EngineWebServices/';
+    $CFG->scormcloudsecretkey = ''; // e.g. '3nrJQ50o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
+    $CFG->scormcloudappid = ''; // e.g. '321WUXJHRT';
+    $CFG->scormcloudmanagersecretkey = ''; // e.g. 'JQ53nr0o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
+    $CFG->scormcloudappmanagerid = ''; // e.g. '123WUXJHRT';
+    $CFG->scormcloudorigin = ScormEngineUtilities::getCanonicalOriginString('Your Company', 'Your Application', 'Version 2.0');
+
+}
+else {
+
+    //Setting values for using the API Adapter.
+    $CFG->wwwroot = '';  // e.g. "'http://localhost/samples/'";
+
+    //2015: must be changed to point the api base endpoint
+    $CFG->scormcloudurl =  ''; //e.g. 'http://localhost:8888/ScormEngineInterface/api/v1/';
+
+    //2015: must be changed to username|password for api user.
+    $CFG->scormcloudsecretkey = ''; // e.g. 'your_api_user|your_api_password";
+    $CFG->scormcloudappid = ''; //e.g. 'defaultid'; //this will be the tenant id.
+    $CFG->scormcloudmanagersecretkey = ''; // e.g. 'JQ53nr0o8AOF7qsP0649KfLyXOlfgyxyyt7ecd2U';
+    $CFG->scormcloudappmanagerid = ''; // e.g. '123WUXJHRT';
+    $CFG->scormcloudorigin = ScormEngineUtilities::getCanonicalOriginString('Your Company', 'Your Application', 'Version 2.0');
+
+
+}
 ?>

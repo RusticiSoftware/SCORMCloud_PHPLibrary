@@ -30,7 +30,9 @@
 
 
 class Configuration{
-	
+    //set this to true if you are using the API
+	public static $useNewAPI = true;
+
 	private $_appId = null;
     private $_securityKey = null;
     private $_scormEngineServiceUrl = null;
@@ -41,9 +43,6 @@ class Configuration{
     private $_proxy = null;
 
 	public function __construct($scormEngineServiceUrl, $appId, $securityKey, $appManagerId, $managerSecurityKey, $originString) {
-		//echo $scormEngineServiceUrl;
-		//echo $appId;
-		//echo $securityKey;
 		// scormEngineServiceUrl (required)
 		if (isset($scormEngineServiceUrl)) {
 			$this->setScormEngineServiceUrl($scormEngineServiceUrl);
@@ -138,6 +137,29 @@ class Configuration{
 
     public function getProxy() {
         return $this->_proxy;
+    }
+    public function getApiUsername() {
+    	return explode("|", $this->_securityKey)[0];
+    }
+
+    public function getApiPassword() {
+    	return explode("|", $this->_securityKey)[1];
+    }
+
+    public function getApiConfigurationString() {
+
+	if(count(explode("|", $this->_securityKey) < 3))
+		return "";
+
+    	return explode("|", $this->_securityKey)[3];
+    }
+
+    public function getTenant()
+    {
+    	if($this->_appId == '')
+ 		return 'default';
+    	else
+    		return $this->_appId;
     }
 }
 ?>

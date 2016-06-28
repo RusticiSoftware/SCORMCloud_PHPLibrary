@@ -34,12 +34,14 @@ require_once 'Enums.php';
 require_once 'LaunchInfo.php';
 require_once 'RegistrationSummary.php';
 require_once 'DebugLogger.php';
+require_once 'IRegistrationService.php';
 
 	/// <summary>
    	/// Client-side proxy for the "rustici.registration.*" Hosted SCORM Engine web
    	/// service methods.  
    	/// </summary>
-class RegistrationService{
+class RegistrationService implements IRegistrationService
+{
 	
 	private $_configuration = null;
 	
