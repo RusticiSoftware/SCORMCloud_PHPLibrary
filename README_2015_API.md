@@ -17,7 +17,9 @@ If you want to know more about our 2015 API then checkout the [API Interactive D
 Below are the high-level steps for getting up and running followed by a breakdown of the detail steps. 
 
 **1.** Evaluate if your application code is using any services or methods that have not been implemented by our adapter code (see step 1.1 below).
-**2.** Overwrite the existing PHP client library files, NOTE: ***PHP 5.6.13 or greater is needed in order to use the adapter***. 
+
+**2.** Overwrite the existing PHP client library files, NOTE: ***PHP 5.6.13 or greater is needed in order to use the adapter***.
+ 
 **3.** Change your PHP configuration settings and set the **$useNewAPI** flag in the Configuration.php to activate the adapter and use the new 2015 API.
 
 **Detail Steps**
