@@ -60,6 +60,17 @@ class ImportResult{
 		}
     }
 
+    public function ConvertAPIImportResult($title, $message, $wasSuccessful, $parserWarnings)
+    {
+        $this->_title = (string)$title;
+        $this->_message = $message;
+        $this->_wasSuccessful = $wasSuccessful;
+        foreach ($parserWarnings as $warning)
+        {
+            array_push($this->_parserWarnings,$warning);
+        }
+    }
+
     /// <summary>
     /// Helper method that takes the entire web service response document and
     /// returns a List of one or more ImportResults.

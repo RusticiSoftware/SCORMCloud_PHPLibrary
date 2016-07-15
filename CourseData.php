@@ -55,6 +55,14 @@ class CourseData{
 		}
     }
 
+    public function BuildFromAPI($id, $versions, $registrations, $title)
+    {
+        $this->_courseId = (string) $id;
+        $this->_numberOfVersions = (integer) $versions;
+        $this->_numberOfRegistrations = (integer) $registrations;
+        $this->_title = (string) $title;
+        return $this;
+    }
 	/// <summary>
     /// Helper method which takes the full XmlDocument as returned from the course listing
     /// web service and returns a List of CourseData objects.
@@ -109,6 +117,10 @@ class CourseData{
     public function getTitle()
     {
         return $this->_title;
+    }
+
+    public function setVersions($versionCount){
+        $this->_numberOfVersions = $versionCount;
     }
 }
 

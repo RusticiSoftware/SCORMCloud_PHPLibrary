@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
+require_once 'IDebugService.php';
 require_once 'ServiceRequest.php';
 require_once 'DebugLogger.php';
 
@@ -36,7 +36,7 @@ require_once 'DebugLogger.php';
 /// Client-side proxy for the "rustici.debug.*" Hosted SCORM Engine web
 /// service methods.  
 /// </summary>
-class DebugService{
+class DebugService implements IDebugService{
 	
 	private $_configuration = null;
 	
