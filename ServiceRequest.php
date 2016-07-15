@@ -76,8 +76,13 @@ class ServiceRequest{
 		{
 			//echo '_fileToPost='.$this->_fileToPost;
 			//TODO - check to see if this file exists
-			$fileContents = file_get_contents($this->_fileToPost);
-			$postParams = array('filedata' => "@$this->_fileToPost");
+			if (!function_exists('curl_file_create')) {
+				// PHP version older than 5.5
+				$postParams = array('filedata' => "@$this->_fileToPost");
+			} else {
+				// PHP 5.5 and higher uses curl_file_create.
+				$postParams = array('filedata' => curl_file_create($this->_fileToPost));
+			}
 		}
 
         //$responseText = Encoding.GetEncoding("utf-8").GetString(responseBytes);
