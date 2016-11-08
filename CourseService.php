@@ -34,6 +34,8 @@ require_once 'Enums.php';
 require_once 'UploadService.php';
 require_once 'ImportResult.php';
 require_once 'DebugLogger.php';
+require_once 'Token.php';
+require_once 'AsyncImportResult.php';
 
 /// <summary>
 /// Client-side proxy for the "rustici.course.*" Hosted SCORM Engine web
@@ -78,6 +80,56 @@ class CourseService{
     	}
 
     	return $response;
+    }
+
+	/// <summary>
+    /// Import a SCORM .pif (zip file) from the local filesystem asynchronously. Use
+    /// GetAsyncImportResult to check the status of the import once the upload process
+    /// has finished.
+    /// </summary>
+    /// <param name="courseId">Unique Identifier for this course.</param>
+    /// <param name="absoluteFilePathToZip">Full path to the .zip file</param>
+    /// <returns>Token with an ID to use in GetAsyncImportResult</returns>
+    public function ImportCourseAsync($courseId, $absoluteFilePathToZip) {
+        $request = new ServiceRequest($this->_configuration);
+        $request->setFileToPost($absoluteFilePathToZip);
+
+        $mParams = array('courseid' => $courseId);
+        $request->setMethodParams($mParams);
+
+        $response = $request->CallService('rustici.course.importCourseAsync');
+        return new Token($response);
+    }
+
+    /// <summary>
+    /// Builds the API call URL for the rustici.course.importCourseAsync method.
+    /// Can be used to direct a user's browser to POST the result.
+    /// </summary>
+    /// <param name="courseId">the course ID to set for the import</param>
+    /// <returns>a string containing the API call URL</returns>
+    public function GetImportCourseAsyncUrl($courseId) {
+        $request = new ServiceRequest($this->_configuration);
+
+        $mParams = array('courseid' => $courseId);
+        $request->setMethodParams($mParams);
+
+        return $request->ConstructUrl('rustici.course.importCourseAsync');
+    }
+
+    /// <summary>
+    /// Gets the import status for an asynchronous import. See the
+    /// AsyncImportResult class for more information.
+    /// </summary>
+    /// <param name="tokenId">the import token ID</param>
+    /// <returns>The async import status</returns>
+    public function GetAsyncImportResult($tokenId) {
+        $request = new ServiceRequest($this->_configuration);
+
+        $mParams = array('token' => $tokenId);
+        $request->setMethodParams($mParams);
+
+        $xmlDoc = $request->callService('rustici.course.getAsyncImportResult');
+        return new AsyncImportResult($xmlDoc);
     }
 
     ///function VersionCourse has been deprecated from the course service
