@@ -1,10 +1,10 @@
 <?php
 
 /* Software License Agreement (BSD License)
- * 
+ *
  * Copyright (c) 2010-2011, Rustici Software, LLC
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -15,7 +15,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -34,35 +34,37 @@ require_once 'Enums.php';
 require_once 'UploadService.php';
 require_once 'ImportResult.php';
 require_once 'DebugLogger.php';
+require_once 'Token.php';
+require_once 'AsyncImportResult.php';
 
 /// <summary>
 /// Client-side proxy for the "rustici.course.*" Hosted SCORM Engine web
-/// service methods.  
+/// service methods.
 /// </summary>
 class CourseService{
-	
+
 	private $_configuration = null;
-	
+
 	public function __construct($configuration) {
 		$this->_configuration = $configuration;
 		//echo $this->_configuration->getAppId();
 	}
-	
+
 	/// <summary>
     /// Import a SCORM .pif (zip file) from the local filesystem.
     /// </summary>
     /// <param name="courseId">Unique Identifier for this course.</param>
     /// <param name="absoluteFilePathToZip">Full path to the .zip file</param>
     /// <param name="itemIdToImport">ID of manifest item to import. If null, root organization is imported</param>
-    /// <param name="permissionDomain">An permission domain to associate this course with, 
-    /// for ftp access service (see ftp service below). 
+    /// <param name="permissionDomain">An permission domain to associate this course with,
+    /// for ftp access service (see ftp service below).
     /// If the domain specified does not exist, the course will be placed in the default permission domain</param>
     /// <returns>List of Import Results</returns>
     public function ImportCourse($courseId, $absoluteFilePathToZip, $itemIdToImport = null)
     {
     	$uploadService = new UploadService($this->_configuration);
     	$location = $uploadService->UploadFile($absoluteFilePathToZip);
-    	
+
     	$importException = null;
     	$response = null;
     	try {
@@ -70,18 +72,68 @@ class CourseService{
     	} catch (Exception $ex) {
     		$importException = $ex;
     	}
-    	
+
     	$uploadService->DeleteFile($location);
-    	
+
     	if($importException != null){
     		throw $importException;
     	}
-    	
+
     	return $response;
     }
-    
-    ///function VersionCourse has been deprecated from the course service 
-    
+
+	/// <summary>
+    /// Import a SCORM .pif (zip file) from the local filesystem asynchronously. Use
+    /// GetAsyncImportResult to check the status of the import once the upload process
+    /// has finished.
+    /// </summary>
+    /// <param name="courseId">Unique Identifier for this course.</param>
+    /// <param name="absoluteFilePathToZip">Full path to the .zip file</param>
+    /// <returns>Token with an ID to use in GetAsyncImportResult</returns>
+    public function ImportCourseAsync($courseId, $absoluteFilePathToZip) {
+        $request = new ServiceRequest($this->_configuration);
+        $request->setFileToPost($absoluteFilePathToZip);
+
+        $mParams = array('courseid' => $courseId);
+        $request->setMethodParams($mParams);
+
+        $response = $request->CallService('rustici.course.importCourseAsync');
+        return new Token($response);
+    }
+
+    /// <summary>
+    /// Builds the API call URL for the rustici.course.importCourseAsync method.
+    /// Can be used to direct a user's browser to POST the result.
+    /// </summary>
+    /// <param name="courseId">the course ID to set for the import</param>
+    /// <returns>a string containing the API call URL</returns>
+    public function GetImportCourseAsyncUrl($courseId) {
+        $request = new ServiceRequest($this->_configuration);
+
+        $mParams = array('courseid' => $courseId);
+        $request->setMethodParams($mParams);
+
+        return $request->ConstructUrl('rustici.course.importCourseAsync');
+    }
+
+    /// <summary>
+    /// Gets the import status for an asynchronous import. See the
+    /// AsyncImportResult class for more information.
+    /// </summary>
+    /// <param name="tokenId">the import token ID</param>
+    /// <returns>The async import status</returns>
+    public function GetAsyncImportResult($tokenId) {
+        $request = new ServiceRequest($this->_configuration);
+
+        $mParams = array('token' => $tokenId);
+        $request->setMethodParams($mParams);
+
+        $xmlDoc = $request->callService('rustici.course.getAsyncImportResult');
+        return new AsyncImportResult($xmlDoc);
+    }
+
+    ///function VersionCourse has been deprecated from the course service
+
     /// <summary>
      /// Import a SCORM .pif (zip file) from an existing .zip file on the
      /// Hosted SCORM Engine server.
@@ -91,8 +143,8 @@ class CourseService{
      /// where the zip file for importing can be found</param>
      /// <param name="fileName">Name of the file, including extension.</param>
      /// <param name="itemIdToImport">ID of manifest item to import</param>
-     /// <param name="permissionDomain">An permission domain to associate this course with, 
-     /// for ftp access service (see ftp service below). 
+     /// <param name="permissionDomain">An permission domain to associate this course with,
+     /// for ftp access service (see ftp service below).
      /// If the domain specified does not exist, the course will be placed in the default permission domain</param>
      /// <returns>List of Import Results</returns>
      public function ImportUploadedCourse($courseId, $path, $permissionDomain = null)
@@ -102,23 +154,16 @@ class CourseService{
 		$params = array('courseid'=>$courseId,
 						'path'=>$path);
 
-       // if (!is_null($itemIdToImport))
-		//{
-//			$params[] = 'itemid' => $itemIdToImport;
-		//}
-        
-         //if (!String.IsNullOrEmpty(permissionDomain))
-         //    request.Parameters.Add("pd", permissionDomain);
 		$request->setMethodParams($params);
         $response = $request->CallService("rustici.course.importCourse");
 
 		write_log('rustici.course.importCourse : '.$response);
-		
+
 		$importResult = new ImportResult(null);
 		return $importResult->ConvertToImportResults($response);
      }
 
-     ///function VersionCourse has been deprecated from the course service 
+     ///function VersionCourse has been deprecated from the course service
 
      /// <summary>
      /// Check the existence of a course with the given courseId
@@ -137,7 +182,7 @@ class CourseService{
     }
 
     /// <summary>
-    /// Retrieve a list of high-level data about all courses owned by the 
+    /// Retrieve a list of high-level data about all courses owned by the
     /// configured appId.
     /// </summary>
  	/// <param name="courseIdFilterRegex">Regular expresion to filter the courses by ID</param>
@@ -166,14 +211,14 @@ class CourseService{
         $request = new ServiceRequest($this->_configuration);
        	$params = array('courseid'=>$courseId);
         if (isset($deleteLatestVersionOnly) && $deleteLatestVersionOnly)
-		{ 
+		{
             $params['versionid'] = 'latest';
 		}
 		$request->setMethodParams($params);
         $response = $request->CallService("rustici.course.deleteCourse");
 		return $response;
     }
-    
+
     /// <summary>
     /// Delete the specified version of a course
     /// </summary>
@@ -188,7 +233,7 @@ class CourseService{
         $response = $request->CallService("rustici.course.deleteCourse");
 		return $response;
     }
-    
+
     /// <summary>
     /// Get the Course Details in XML Format
     /// </summary>
@@ -200,7 +245,7 @@ class CourseService{
        	$request->setMethodParams($params);
         return $request->CallService("rustici.course.getCourseDetail");
     }
-    
+
 	/// <summary>
     /// Get the Course Metadata in XML Format
     /// </summary>
@@ -214,18 +259,18 @@ class CourseService{
 		$enum = new Enum();
         $request = new ServiceRequest($this->_configuration);
 		$params = array('courseid'=>$courseId);
-        
+
         if (isset($versionId) && $versionId != 0)
         {
             $params['versionid'] = $versionId;
         }
         $params['scope'] = $enum->getMetadataScope($scope);
         $params['mdformat'] = $enum->getDataFormat($format);
-		
+
 		$request->setMethodParams($params);
-		
+
         $response = $request->CallService("rustici.course.getMetadata");
-        
+
         // Return the subset of the xml starting with the top <object>
         return $response;
     }
@@ -247,9 +292,9 @@ class CourseService{
         if(isset($cssUrl))
 		{
             $params['cssurl'] = $cssUrl;
-		} 
+		}
 		$request->SetMethodParams($params);
-			
+
         return $request->ConstructUrl("rustici.course.preview");
     }
 
@@ -297,8 +342,8 @@ class CourseService{
     	$request->setMethodParams($params);
     	return $request->ConstructUrl('rustici.course.importCourse');
     }
-    
-    
+
+
     public function GetUpdateAssetsUrl($courseId, $redirectUrl)
     {
     	$request = new ServiceRequest($this->_configuration);
@@ -307,7 +352,7 @@ class CourseService{
     	$request->setMethodParams($params);
     	return $request->ConstructUrl('rustici.course.updateAssets');
     }
-    
+
     /// <summary>
     /// Retrieve the list of course attributes associated with a specific version
     /// of the specified course.
@@ -319,7 +364,7 @@ class CourseService{
     {
 		$request = new ServiceRequest($this->_configuration);
         $params = array('courseid' => $courseId);
-        
+
 		if (isset($versionId))
             $params["versionid"] = $versionId;
 
@@ -347,11 +392,11 @@ class CourseService{
     {
         $request = new ServiceRequest($this->_configuration);
         $params = array('courseid' => $courseId);
-		
+
 		if (isset($versionId))
             $params["versionid"] = $versionId;
-		
-            
+
+
         foreach ($attributePairs as $key => $value)
         {
             $params[$key] = $value;
@@ -368,7 +413,7 @@ class CourseService{
             $atts[$name] = $attribute["value"];
         }
 		return $atts;
-        
+
     }
 
     /// <summary>
@@ -380,10 +425,10 @@ class CourseService{
     {
     	$request = new ServiceRequest($this->_configuration);
     	$params = array('courseid' => $courseId, 'path' => $uploadLocation);
-    	
+
     	$request->setMethodParams($params);
     	$response = $request->CallService('rustici.course.updateAssets');
-    	
+
     	return $response;
     }
  }
