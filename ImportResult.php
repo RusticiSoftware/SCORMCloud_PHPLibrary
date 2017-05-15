@@ -47,7 +47,7 @@ class ImportResult{
 		{
 		        $this->_title = (string) $importResultElement->title;
 		        $this->_message = (string) $importResultElement->message;
-		        $this->_wasSuccessful = (bool) $importResultElement["successful"];
+		        $this->_wasSuccessful = filter_var( $importResultElement["successful"], FILTER_VALIDATE_BOOLEAN);
 				$pwarnings = $importResultElement->parserwarnings;
 				foreach ($pwarnings as $pwarning)
 				{

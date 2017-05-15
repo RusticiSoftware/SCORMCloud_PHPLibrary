@@ -2,7 +2,7 @@
 
 /* Software License Agreement (BSD License)
  *
- * Copyright (c) 2010-2011, Rustici Software, LLC
+ * Copyright (c) 2010-2017, Rustici Software, LLC
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,6 +27,20 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>untitled</title>
+
+</head>
+
+<body>
+<?php
 
 require_once('config.php');
 require_once('../ScormEngineService.php');
@@ -41,30 +55,19 @@ $Origin = $CFG->scormcloudorigin;
 $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 $courseService = $ScormService->getCourseService();
 
-$token = $courseService->ImportCourseAsync('mycourseid', '/path/to/course/here');
+$courseId = uniqid();
+$interstitial = $CFG->wwwroot."/AsyncStatus.php";
+$asyncImportUrl = $courseService->GetImportCourseAsyncUrl($courseId, $interstitial);
 
-$numAttempts = 0;
+?>
 
-while (++$numAttempts < 1000) {
-    $importStatus = $courseService->GetAsyncImportResult($token->getTokenId());
-    if ($importStatus->getStatus() != "running") {
-        $importResults = $importStatus->getImportResults();
-        foreach ($importResults as $importResult) {
-            if ($importResult->getWasSuccessful()) {
-                echo "Import of course titled '".$importResult->getTitle()."' was successful: ".$importResult->getMessage()."\n";
-            } else {
-                echo "Import of course titled '".$importResult->getTitle()."' failed: ".$importResult->getMessage()."\n";
-            }
-        }
-        break;
-    } else {
-        echo "Import status: ".$importStatus->getStatus()." ; message: ".$importStatus->getMessage()."\n";
-    }
-    sleep(1);
-}
+<form action="<?php echo $asyncImportUrl; ?>" method="post" enctype="multipart/form-data">
+    <label for="file">Filename:</label>
+    <input type="file" name="filedata" id="file" />
+    <br />
+    <input type="submit" name="submit" value="Submit" />
+</form>
+<br><br>
 
-try {
-    $courseService->DeleteCourse('mycourseid');
-} catch (Exception $e) {
-    // delete failed, so the import above probably failed
-}
+</body>
+</html>
