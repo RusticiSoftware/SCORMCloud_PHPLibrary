@@ -71,7 +71,7 @@ if ($debugService->CloudAuthPing()){
 	echo "<p style='color:red'>CloudAuthPing call was not successful.</p>";
 }
 echo "<br/><br/>";
-echo '<a href="ImportSample.php">Import New Package</a>';
+echo '<a href="AsyncImport.php">Import New Package</a>';
 echo "<br/><br/>";
 
 write_log('Creating CourseService');

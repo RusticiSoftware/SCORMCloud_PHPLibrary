@@ -106,11 +106,21 @@ class CourseService{
     /// Can be used to direct a user's browser to POST the result.
     /// </summary>
     /// <param name="courseId">the course ID to set for the import</param>
+    /// <param name="redirectUrl">optional URL that a browser should be redirected to after the operation completes</param>
+    /// <param name="email">optional email address  associated with an existing SCORM Cloud website user.
+    //                      If this parameter is included, user information will be attached to this event
+    //                      in the event history on the SCORM Cloud website</param>
     /// <returns>a string containing the API call URL</returns>
-    public function GetImportCourseAsyncUrl($courseId) {
+    public function GetImportCourseAsyncUrl($courseId, $redirectUrl = null, $email = null) {
         $request = new ServiceRequest($this->_configuration);
 
         $mParams = array('courseid' => $courseId);
+        if ( isset($redirectUrl) ) {
+            $mParams[ 'redirecturl' ] = $redirectUrl;
+        }
+        if ( isset($email) ) {
+            $mParams[ 'email' ] = $email;
+        }
         $request->setMethodParams($mParams);
 
         return $request->ConstructUrl('rustici.course.importCourseAsync');
@@ -127,7 +137,6 @@ class CourseService{
 
         $mParams = array('token' => $tokenId);
         $request->setMethodParams($mParams);
-
         $xmlDoc = $request->callService('rustici.course.getAsyncImportResult');
         return new AsyncImportResult($xmlDoc);
     }

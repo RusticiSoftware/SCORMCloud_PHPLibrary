@@ -38,36 +38,46 @@
     <title>untitled</title>
 
 </head>
-
-<body>
 <?php
 
 require_once('config.php');
 require_once('../ScormEngineService.php');
-
 global $CFG;
 
-$ServiceUrl = $CFG->scormcloudurl;
-$AppId = $CFG->scormcloudappid;
-$SecretKey = $CFG->scormcloudsecretkey;
-$Origin = $CFG->scormcloudorigin;
 
-$ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
-$courseService = $ScormService->getCourseService();
+//These two parameters are passed in to the redirect url after the importCourseAsync operation returns.
+$courseId = $_GET["courseid"];
+$tokenId = $_GET["tokenid"];
 
-$courseId = uniqid();
-$interstitial = $CFG->wwwroot."/AsyncStatus.php";
-$asyncImportUrl = $courseService->GetImportCourseAsyncUrl($courseId, $interstitial);
-
+$statusUrl = $CFG->wwwroot."/AsyncResult.php?tokenid=" . $tokenId;
+$detailUrl = $CFG->wwwroot."/CourseDetailSample.php?courseid=" . $courseId;
 ?>
+<script>
+    function loadDoc() {
+        var xhttp;
+        xhttp=new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                updateStatusMessage(this);
+            }
+        };
+        xhttp.open("GET", "<?php echo $statusUrl; ?>", true);
+        xhttp.send();
+    }
+    function updateStatusMessage(xhttp) {
+        var jsonObj = JSON.parse(xhttp.responseText);
+        document.getElementById("status").innerHTML = jsonObj.status;
+        document.getElementById("message").innerHTML = jsonObj.statusMessage;
+        if (jsonObj.status === "finished") {
+            window.location = "<?php echo $detailUrl; ?>";
+        } else {
+            window.setTimeout(loadDoc, 10000);
+        }
+    }
 
-<form action="<?php echo $asyncImportUrl; ?>" method="post" enctype="multipart/form-data">
-    <label for="file">Filename:</label>
-    <input type="file" name="filedata" id="file" />
-    <br />
-    <input type="submit" name="submit" value="Submit" />
-</form>
-<br><br>
-
+</script>
+<body onload="loadDoc()">
+<div id="status"></div>
+<div id="message"></div>
 </body>
 </html>

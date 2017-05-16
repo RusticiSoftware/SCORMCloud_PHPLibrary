@@ -27,20 +27,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-    <title>untitled</title>
-
-</head>
-
-<body>
-<?php
+header('Content-type: application/json');
 
 require_once('config.php');
 require_once('../ScormEngineService.php');
@@ -55,19 +43,15 @@ $Origin = $CFG->scormcloudorigin;
 $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 $courseService = $ScormService->getCourseService();
 
-$courseId = uniqid();
-$interstitial = $CFG->wwwroot."/AsyncStatus.php";
-$asyncImportUrl = $courseService->GetImportCourseAsyncUrl($courseId, $interstitial);
+$tokenId = $_GET["tokenid"];
+
+$resp = $courseService->GetAsyncImportResult($tokenId);
+error_log(print_r($resp, 1));
+    $result = array( "status" => (string) $resp->getStatus(),
+        "statusMessage" => (string) $resp->getMessage(),
+    );
+
+echo json_encode($result);
+
 
 ?>
-
-<form action="<?php echo $asyncImportUrl; ?>" method="post" enctype="multipart/form-data">
-    <label for="file">Filename:</label>
-    <input type="file" name="filedata" id="file" />
-    <br />
-    <input type="submit" name="submit" value="Submit" />
-</form>
-<br><br>
-
-</body>
-</html>

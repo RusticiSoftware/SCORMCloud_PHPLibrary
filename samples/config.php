@@ -32,6 +32,7 @@
 require_once('../ScormEngineUtilities.php');
 unset($CFG);
 
+$CFG = new StdClass();
 $CFG->wwwroot = '';  // e.g. "http://localhost/PhpLibrary/samples/";
 
 //Rustici Software SCORM Cloud API Key Settings
