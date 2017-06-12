@@ -1,0 +1,7 @@
+{
+    "name": "rustici-software/scorm-cloud",
+    "description": "This package simplifies connecting to the SCORM Cloud API (v1).",
+    "require": {
+        "php": "^5.6.30 || ^7.0"
+    }
+}
