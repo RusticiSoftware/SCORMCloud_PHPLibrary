@@ -121,10 +121,10 @@ class ApplicationService{
     public function AddSecretKey($appId, $description)
     {
         $request = new ServiceRequest($this->_configuration);
-        $params = array('name'=>$ApplicationId,
-            'description'=>$description);
+        $params = array('appid' => $appId,
+            'description' => $description);
         $request->setMethodParams($params);
-        return $request->CallManagerService("rustici.application.AddSecretKey");
+        return $request->CallManagerService("rustici.application.addSecretKey");
     }
 
     /// <summary>
