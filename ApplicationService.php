@@ -144,7 +144,7 @@ class ApplicationService{
         {
             $params['description'] = $description;
         }
-        if (isset($allowDelete))
+        if (isset($active))
         {
             $params['active'] = $active;
         }
