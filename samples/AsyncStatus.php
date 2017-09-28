@@ -52,12 +52,12 @@ $tokenId = $_GET["tokenid"];
 $statusUrl = $CFG->wwwroot."/AsyncResult.php?tokenid=" . $tokenId;
 $detailUrl = $CFG->wwwroot."/CourseDetailSample.php?courseid=" . $courseId;
 ?>
-<script>
+<script type="javascript">
     function loadDoc() {
         var xhttp;
         xhttp=new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState === 4 && this.status === 200) {
                 updateStatusMessage(this);
             }
         };
@@ -68,6 +68,7 @@ $detailUrl = $CFG->wwwroot."/CourseDetailSample.php?courseid=" . $courseId;
         var jsonObj = JSON.parse(xhttp.responseText);
         document.getElementById("status").innerHTML = jsonObj.status;
         document.getElementById("message").innerHTML = jsonObj.statusMessage;
+        document.getElementById("progress").innerHTML = jsonObj.progress;
         if (jsonObj.status === "finished") {
             window.location = "<?php echo $detailUrl; ?>";
         } else {
@@ -79,5 +80,6 @@ $detailUrl = $CFG->wwwroot."/CourseDetailSample.php?courseid=" . $courseId;
 <body onload="loadDoc()">
 <div id="status"></div>
 <div id="message"></div>
+<div id="progress"></div>
 </body>
 </html>
