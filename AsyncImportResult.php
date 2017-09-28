@@ -32,11 +32,13 @@
 class AsyncImportResult {
     private $_status = "";
     private $_message = "";
+    private $_progress = 0;
+    private $_xml;
 
     private $_importResults = array();
 
     function __construct($xmlDoc) {
-		$xml = simplexml_load_string($xmlDoc);
+        $xml = simplexml_load_string($xmlDoc);
 
         $this->_status = $xml->status;
 
@@ -44,12 +46,18 @@ class AsyncImportResult {
             $this->_message = $xml->message;
         }
 
-        if (isset($xml->importresults)) {
-            $importResults = $xml->importresults;
+        if (isset($xml->progress)) {
+            $this->_progress = $xml->progress;
+        }
+
+        if (isset($xml->importresult)) {
+            $importResults = $xml->importresult;
             foreach ($importResults as $result) {
-                $this->_importResults[] = new ImportResult($result->importresult);
+                $this->_importResults[] = new ImportResult($result);
             }
         }
+
+        $this->_xml = $xml;
     }
 
     // Can be created/running/finished/error
@@ -67,6 +75,15 @@ class AsyncImportResult {
         return $this->_importResults;
     }
 
+    // (Optional) The progress of the import 0 - 100
+    public function getProgress() {
+        return $this->_progress;
+    }
+
+    // Get the xml doc for the response
+    public function getXml() {
+        return $this->_xml;
+    }
 }
 
 ?>

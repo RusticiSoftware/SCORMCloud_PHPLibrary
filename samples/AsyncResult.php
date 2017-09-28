@@ -49,6 +49,7 @@ $resp = $courseService->GetAsyncImportResult($tokenId);
 error_log(print_r($resp, 1));
     $result = array( "status" => (string) $resp->getStatus(),
         "statusMessage" => (string) $resp->getMessage(),
+        "progress" => (string) $resp->getProgress(),
     );
 
 echo json_encode($result);
