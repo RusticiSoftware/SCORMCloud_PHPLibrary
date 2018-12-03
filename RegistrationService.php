@@ -177,8 +177,10 @@ class RegistrationService{
         /// </summary>
         /// <param name="courseId>Option course id filter</param>
         /// <param name="learnerId>Option learner id filter</param>
+        //  <param name="since">Optional DateTime to filter on date of update</param>
+        //  <param name="until">Optional DateTime to filter on date of update</param>
         /// <returns></returns>
-        public function GetRegistrationList($courseId, $learnerId)
+        public function GetRegistrationList($courseId, $learnerId, $since=null, $until=null)
         {
             $request = new ServiceRequest($this->_configuration);
 	    $params = array();
@@ -190,6 +192,13 @@ class RegistrationService{
 	      {
 		$params['learnerid'] = $learnerId;
 	      }
+            if (isset($since)) {
+              $params['after'] = $since -> format($since::ISO8601);
+            }
+
+            if (isset($until)) {
+              $params['until'] = $until -> format($until::ISO8601);
+            }
             $request->setMethodParams($params);
 
             $response = $request->CallService("rustici.registration.getRegistrationList");
@@ -219,8 +228,10 @@ class RegistrationService{
         /// <param name="courseId">Option course id filter</param>
         /// <param name="learnerId">Optional learner id filter</param>
         /// <param name="resultsFormat">Optional set format of results</param>
+        //  <param name="since">Optional DateTime to filter on date of update</param>
+        //  <param name="until">Optional DateTime to filter on date of update</param>
         /// <returns></returns>
-        public function GetRegistrationListResults($courseId, $learnerId, $resultsFormat)
+        public function GetRegistrationListResults($courseId, $learnerId, $resultsFormat, $since=null, $until=null)
         {
             $enum = new Enum();
             $request = new ServiceRequest($this->_configuration);
@@ -237,6 +248,13 @@ class RegistrationService{
 	      {
 		$params['resultsformat'] = $enum->getRegistrationResultsFormat($resultsFormat);
 	      }
+            if (isset($since)) {
+              $params['after'] = $since -> format($since::ISO8601);
+            }
+
+            if (isset($until)) {
+              $params['until'] = $until -> format($until::ISO8601);
+            }
             
             $request->setMethodParams($params);
 
