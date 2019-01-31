@@ -137,7 +137,7 @@ class ServiceRequest{
 								'ts' => gmdate("YmdHis")
 							);
 
-		array_merge($parameterMap,$this->_methodParams);
+        $parameterMap = array_merge($parameterMap,$this->_methodParams);
 		foreach($this->_methodParams as $key => $value)
 		{
 			$parameterMap[$key] = $value;
