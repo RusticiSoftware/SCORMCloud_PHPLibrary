@@ -43,7 +43,7 @@ $ScormService = new ScormEngineService($ServiceUrl,$AppId,$SecretKey,$Origin);
 $courseId = $_GET['courseid'];
 
 $courseService = $ScormService->getCourseService();
-$propsEditorUrl = $courseService->GetPropertyEditorUrl($courseId,Null,Null);
+$propsEditorUrl = $courseService->GetPropertyEditorUrl($courseId,null,null);
 
 
 //This area is where we collect the attribut values from the form to send to the UpdateAttributes call.
@@ -55,7 +55,7 @@ if (isset($att) && isset($attval) && $attval != '')
 	
 	$paramAtts = array($att => $attval);
 	//If you have more attributes to send, just add more to the $paramAtts array.
-	$changedAtts = $courseService->UpdateAttributes($courseId,Null,$paramAtts);
+	$changedAtts = $courseService->UpdateAttributes($courseId,null,$paramAtts);
 	
 	echo "<h2>Changed Attributes</h2>";
 	foreach ($changedAtts as $key => $value)
