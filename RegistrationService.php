@@ -268,7 +268,7 @@ class RegistrationService{
         /// </summary>
         /// <param name="registrationId">Unique Identifier for the registration</param>
         /// <param name="deleteLatestInstanceOnly">If false, all instances are deleted</param>
-        public function DeleteRegistration($registrationId, $deleteLatestInstanceOnly=False)
+        public function DeleteRegistration($registrationId, $deleteLatestInstanceOnly=false)
         {
             $request = new ServiceRequest($this->_configuration);
             $params = array('regid' => $registrationId);

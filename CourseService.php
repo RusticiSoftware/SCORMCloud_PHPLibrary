@@ -215,7 +215,7 @@ class CourseService{
     /// </summary>
     /// <param name="courseId">Unique Identifier for the course</param>
     /// <param name="deleteLatestVersionOnly">If false, all versions are deleted</param>
-    public function DeleteCourse($courseId, $deleteLatestVersionOnly = False)
+    public function DeleteCourse($courseId, $deleteLatestVersionOnly = false)
     {
         $request = new ServiceRequest($this->_configuration);
        	$params = array('courseid'=>$courseId);
@@ -369,7 +369,7 @@ class CourseService{
     /// <param name="courseId">Unique Identifier for the course</param>
     /// <param name="versionId">Specific version the specified course</param>
     /// <returns>Dictionary of all attributes associated with this course</returns>
-    public function GetAttributes($courseId, $versionId=Null)
+    public function GetAttributes($courseId, $versionId=null)
     {
 		$request = new ServiceRequest($this->_configuration);
         $params = array('courseid' => $courseId);
