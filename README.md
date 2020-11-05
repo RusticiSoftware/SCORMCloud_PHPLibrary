@@ -1,3 +1,7 @@
+**NOTE:**  This client library is for the SCORM Cloud V1 API, which is on a deprecation schedule.  The client library for SCORM Cloud's V2 API can be found [here](https://github.com/RusticiSoftware/scormcloud-api-v2-client-php).
+
+--- 
+
 # SCORM Cloud PHP API Bindings
 
 This library provides implementations for the majority, but not all, of the
